@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31605.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelEditorAddIn", "ExcelEditorAddIn\ExcelEditorAddIn.csproj", "{DDE60862-6CFD-41E7-8373-06E4DBE5AD9B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDE60862-6CFD-41E7-8373-06E4DBE5AD9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDE60862-6CFD-41E7-8373-06E4DBE5AD9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDE60862-6CFD-41E7-8373-06E4DBE5AD9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDE60862-6CFD-41E7-8373-06E4DBE5AD9B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {89D08CF0-6344-4420-BC0C-F2497A0903D5}
+	EndGlobalSection
+EndGlobal
