@@ -197,6 +197,19 @@
     </Compile>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EeCommon\EeCommon.csproj">
+      <Project>{1cff900d-552a-48f5-900c-40c691971cd4}</Project>
+      <Name>EeCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EeJson\EeJson.csproj">
+      <Project>{b91cf361-595f-49a3-ae3a-e51ba29d792a}</Project>
+      <Name>EeJson</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
