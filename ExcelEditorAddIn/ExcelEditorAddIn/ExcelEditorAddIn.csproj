@@ -156,9 +156,18 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="ExcelEditorRibbon.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ExcelEditorRibbon.Designer.cs">
+      <DependentUpon>ExcelEditorRibbon.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="ExcelEditorRibbon.resx">
+      <DependentUpon>ExcelEditorRibbon.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
