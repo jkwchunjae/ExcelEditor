@@ -70,6 +70,7 @@
     <Compile Include="Element\JsonBaseElement.cs" />
     <Compile Include="Element\JsonObjectElement.cs" />
     <Compile Include="Element\JsonTableElement.cs" />
+    <Compile Include="Element\JsonValueElement.cs" />
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

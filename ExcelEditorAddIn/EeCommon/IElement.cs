@@ -18,7 +18,12 @@ namespace EeCommon
     public interface IElement
     {
         ElementType Type { get; }
-        string GetString();
+        object GetValue();
+        string GetJsonText();
+    }
+
+    public interface IValueElement
+    {
     }
 
     public interface IArrayElement : IElement
@@ -37,5 +42,6 @@ namespace EeCommon
     {
         List<string> Keys { get; }
         object[,] Values { get; }
+        IElement[,] Elements { get; }
     }
 }

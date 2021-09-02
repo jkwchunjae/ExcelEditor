@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using EeCommon;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +52,23 @@ namespace EeJson
                     return "{object}";
                 default:
                     return token.Value<string>();
+            }
+        }
+
+        public static JsonBaseElement ToJsonElement(this JToken token)
+        {
+            var baseElement = new JsonBaseElement(token);
+
+            switch (baseElement.Type)
+            {
+                case ElementType.Table:
+                    return new JsonTableElement(baseElement);
+                case ElementType.Array:
+                    return new JsonArrayElement(baseElement);
+                case ElementType.Object:
+                    return new JsonObjectElement(baseElement);
+                default:
+                    return new JsonValueElement(baseElement);
             }
         }
     }
