@@ -11,11 +11,11 @@ namespace ExcelEditorAddIn
 {
     public class TableWorkbook : BaseWorkbook
     {
-        public ITableDocument TableDocument { get; private set; }
-        public TableWorkbook(ITableDocument document, string jsonFilePath)
-            : base(document, jsonFilePath)
+        public ITableElement TableElement { get; private set; }
+        public TableWorkbook(ITableElement tableElement, string jsonFilePath)
+            : base(tableElement, jsonFilePath)
         {
-            TableDocument = document;
+            TableElement = tableElement;
         }
 
         public void OpenFile()
@@ -23,7 +23,7 @@ namespace ExcelEditorAddIn
             Workbook = Globals.ThisAddIn.Application.Workbooks.Add();
             MainWorksheet = Workbook.SheetList().First();
 
-            var tableDocument = TableDocument;
+            var tableDocument = TableElement;
             var book = Workbook;
             var sheet = MainWorksheet;
 

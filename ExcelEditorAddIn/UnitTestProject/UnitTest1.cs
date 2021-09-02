@@ -1,7 +1,7 @@
 ﻿using EeJson;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using System;
-using System.Text.Json;
 
 namespace UnitTestProject
 {
@@ -17,9 +17,10 @@ namespace UnitTestProject
                 new { Name = "Item", Price = 1200 },
             };
 
-            var jsonText = JsonSerializer.Serialize(table);
+            var jsonText = JsonConvert.SerializeObject(table);
 
-            var tableDocument = new JsonTableDocument(jsonText);
+            var baseElement = new JsonBaseElement(jsonText);
+            var tableDocument = new JsonTableElement(baseElement);
 
             Assert.AreEqual(2, tableDocument.Length);
             Assert.AreEqual(3, tableDocument.Keys.Count);
@@ -37,9 +38,10 @@ namespace UnitTestProject
                 new { Name = "Item", Price = 1200 },
             };
 
-            var jsonText = JsonSerializer.Serialize(table);
+            var jsonText = JsonConvert.SerializeObject(table);
 
-            var tableDocument = new JsonTableDocument(jsonText);
+            var baseElement = new JsonBaseElement(jsonText);
+            var tableDocument = new JsonTableElement(baseElement);
         }
     }
 }

@@ -1,48 +1,52 @@
 ﻿using EeCommon;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EeJson
 {
-    public class JsonTableDocument : JsonBaseDocument, ITableDocument
+    public class JsonTableElement : JsonBaseElement, ITableElement
     {
-        public int Length => Doc?.RootElement.GetArrayLength() ?? 0;
+        public int Length => JArray.Count;
         public bool Any => Length != 0;
         public bool Empty => Length == 0;
         public List<string> Keys { get; private set; }
         public object[,] Values { get; private set; }
 
-        public JsonTableDocument(string jsonText)
-            : base(jsonText)
+        private JArray JArray;
+        public JsonTableElement(JArray array)
+            : base(array)
         {
-            Keys = MakeKeys(Doc);
-            Values = MakeValues(Doc);
+            JArray = array;
+            Keys = MakeKeys();
+            Values = MakeValues();
         }
-        public JsonTableDocument(JsonBaseDocument baseDocument)
-            : base(baseDocument.Doc)
+        public JsonTableElement(JsonBaseElement baseElement)
+            : base(baseElement.Token)
         {
-            Keys = MakeKeys(Doc);
-            Values = MakeValues(Doc);
+            JArray = (JArray)baseElement.Token;
+            Keys = MakeKeys();
+            Values = MakeValues();
         }
 
-        private List<string> MakeKeys(JsonDocument doc)
+        private List<string> MakeKeys()
         {
-            var keys = doc.RootElement.EnumerateArray()
-                .SelectMany(x => x.EnumerateObject().Select(e => e.Name))
+            var keys = JArray
+                .SelectMany(x => ((JObject)x).Properties().Select(e => e.Name))
                 .Distinct()
                 .ToList();
-
             return keys;
         }
-
-        private object[,] MakeValues(JsonDocument doc)
+        private object[,] MakeValues()
         {
             var values = new object[Length, Keys.Count];
             for (var row = 0; row < Length; row++)
             {
-                var current = doc.RootElement[row];
-                var obj = current.EnumerateObject()
+                var current = (JObject)JArray[row];
+                var obj = current.Properties()
                     .ToDictionary(x => x.Name, x => x.Value);
                 for (var column = 0; column < Keys.Count; column++)
                 {
@@ -57,7 +61,6 @@ namespace EeJson
                     }
                 }
             }
-
             return values;
         }
     }
