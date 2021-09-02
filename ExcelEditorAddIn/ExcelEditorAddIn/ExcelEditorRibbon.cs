@@ -22,24 +22,7 @@ namespace ExcelEditorAddIn
             var result = openFileDialog1.ShowDialog();
             if (result == DialogResult.OK || result == DialogResult.Yes)
             {
-                OpenFile();
-            }
-        }
-
-        private void OpenFile()
-        {
-            // TODO: json syntax error
-            var filePath = openFileDialog1.FileName;
-            using (var reader = new StreamReader(openFileDialog1.OpenFile()))
-            {
-                var jsonText = reader.ReadToEnd();
-                var baseDocument = new JsonBaseDocument(jsonText);
-                if (baseDocument.Type == DocumentType.Table)
-                {
-                    var jsonTableDocument = new JsonTableDocument(baseDocument);
-                    var tableWorksheet = new TableWorksheet();
-                    tableWorksheet.OpenFile(jsonTableDocument, filePath);
-                }
+                Globals.ThisAddIn.OpenFile(openFileDialog1);
             }
         }
     }

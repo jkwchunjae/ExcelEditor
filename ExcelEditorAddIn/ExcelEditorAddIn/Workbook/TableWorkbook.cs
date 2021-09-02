@@ -9,12 +9,23 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ExcelEditorAddIn
 {
-    public class TableWorksheet
+    public class TableWorkbook : BaseWorkbook
     {
-        public void OpenFile(ITableDocument tableDocument, string jsonFilePath)
+        public ITableDocument TableDocument { get; private set; }
+        public TableWorkbook(ITableDocument document, string jsonFilePath)
+            : base(document, jsonFilePath)
         {
-            var book = Globals.ThisAddIn.Application.Workbooks.Add();
-            var sheet = book.SheetList().First();
+            TableDocument = document;
+        }
+
+        public void OpenFile()
+        {
+            Workbook = Globals.ThisAddIn.Application.Workbooks.Add();
+            MainWorksheet = Workbook.SheetList().First();
+
+            var tableDocument = TableDocument;
+            var book = Workbook;
+            var sheet = MainWorksheet;
 
             // title
             for (var column = 1; column <= tableDocument.Keys.Count; column++)
