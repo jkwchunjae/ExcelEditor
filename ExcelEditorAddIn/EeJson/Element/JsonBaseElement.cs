@@ -47,7 +47,12 @@ namespace EeJson
             return ElementType.Value;
         }
 
-        public string GetString()
+        public object GetValue()
+        {
+            return Token.ToExcelValue();
+        }
+
+        public string GetJsonText()
         {
             var jsonText = JsonConvert.SerializeObject(Token, Formatting.Indented);
             return jsonText;
