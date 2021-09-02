@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ExcelEditorAddIn
@@ -18,33 +19,13 @@ namespace ExcelEditorAddIn
             TableElement = tableElement;
         }
 
-        public void OpenFile()
+        public override void Open()
         {
-            Workbook = Globals.ThisAddIn.Application.Workbooks.Add();
-            MainWorksheet = Workbook.SheetList().First();
+            MakeWorkbook();
 
-            var tableDocument = TableElement;
-            var book = Workbook;
-            var sheet = MainWorksheet;
+            MainWorksheet = new TableWorksheet(TableElement, this, Workbook.SheetList().First());
 
-            // title
-            for (var column = 1; column <= tableDocument.Keys.Count; column++)
-            {
-                Excel.Range cell = sheet.Cells[1, column];
-                cell.Value2 = tableDocument.Keys[column - 1];
-            }
-
-            // values
-            if (tableDocument.Any)
-            {
-                var minCell = sheet.Cell(2, 1);
-                var maxCell = sheet.Cell(1 + tableDocument.Length, tableDocument.Keys.Count);
-                Excel.Range valuesRange = sheet.Range[minCell, maxCell];
-                valuesRange.Value2 = tableDocument.Values;
-            }
-
-            book.Activate();
-            sheet.Activate();
+            Workbook.Activate();
         }
     }
 }

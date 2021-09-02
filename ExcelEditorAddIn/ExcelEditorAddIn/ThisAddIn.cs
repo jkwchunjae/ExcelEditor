@@ -54,9 +54,9 @@ namespace ExcelEditorAddIn
                 if (baseElement.Type == ElementType.Table)
                 {
                     var jsonTableElement = new JsonTableElement(baseElement);
-                    var tableWorksheet = new TableWorkbook(jsonTableElement, filePath);
-                    _workbookData.Add(tableWorksheet);
-                    tableWorksheet.OpenFile();
+                    workbookData = new TableWorkbook(jsonTableElement, filePath);
+                    _workbookData.Add(workbookData);
+                    workbookData.Open();
                 }
             }
         }
