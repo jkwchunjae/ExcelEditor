@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EeCommon
 {
-    public enum DocumentType
+    public enum ElementType
     {
         Value,
         Array,
@@ -15,25 +15,25 @@ namespace EeCommon
         Table,
     }
 
-    public interface IDocument
+    public interface IElement
     {
-        DocumentType Type { get; }
+        ElementType Type { get; }
         string GetString();
     }
 
-    public interface IArrayDocument : IDocument
+    public interface IArrayElement : IElement
     {
         int Length { get; }
         bool Any { get; }
         bool Empty { get; }
     }
 
-    public interface IObjectDocument : IDocument
+    public interface IObjectElement : IElement
     {
         List<string> Keys { get; }
     }
 
-    public interface ITableDocument : IDocument, IArrayDocument
+    public interface ITableElement : IElement, IArrayElement
     {
         List<string> Keys { get; }
         object[,] Values { get; }

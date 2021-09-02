@@ -5,16 +5,16 @@ namespace ExcelEditorAddIn
 {
     public class BaseWorkbook
     {
-        public DocumentType DocumentType => Document.Type;
+        public ElementType ElementType => Element.Type;
         public string JsonFilePath { get; protected set; }
-        public IDocument Document { get; protected set; }
+        public IElement Element { get; protected set; }
         public Excel.Workbook Workbook { get; protected set; }
         public Excel.Worksheet MainWorksheet { get; protected set;  }
 
-        public BaseWorkbook(IDocument document, string jsonFilePath)
+        public BaseWorkbook(IElement element, string jsonFilePath)
         {
             JsonFilePath = jsonFilePath;
-            Document = document;
+            Element = element;
         }
     }
 }

@@ -1,48 +1,56 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EeJson
 {
     public static class JsonExtensions
     {
-        private static JsonValueKind[] _primitiveTypes = new[]
+        private static JTokenType[] _primitiveTypes = new[]
         {
-            JsonValueKind.Null,
-            JsonValueKind.True,
-            JsonValueKind.String,
-            JsonValueKind.False,
-            JsonValueKind.Number,
+            JTokenType.String,
+            JTokenType.Integer,
+            JTokenType.Boolean,
+            JTokenType.Date,
+            JTokenType.Float,
+            JTokenType.Guid,
+            JTokenType.Uri,
+            JTokenType.TimeSpan,
+            JTokenType.Null,
         };
 
-        public static bool IsPrimitiveType(this JsonValueKind jsonValueKind)
+        public static bool IsPrimitiveType(this JTokenType tokenType)
         {
-            return _primitiveTypes.Contains(jsonValueKind);
+            return _primitiveTypes.Contains(tokenType);
         }
 
-        public static object ToExcelValue(this JsonElement jsonElement)
+        public static object ToExcelValue(this JToken token)
         {
-            switch (jsonElement.ValueKind)
+            switch (token.Type)
             {
-                case JsonValueKind.Null:
+                case JTokenType.Null:
                     return null;
-                case JsonValueKind.True:
-                    return true;
-                case JsonValueKind.False:
-                    return false;
-                case JsonValueKind.Number:
-                    return jsonElement.GetDouble();
-                case JsonValueKind.String:
-                    return jsonElement.GetString();
-                case JsonValueKind.Array:
+                case JTokenType.Boolean:
+                    return token.Value<bool>();
+                case JTokenType.Integer:
+                    return token.Value<int>();
+                case JTokenType.Float:
+                    return token.Value<double>();
+                case JTokenType.String:
+                    return token.Value<string>();
+                case JTokenType.Date:
+                    return token.Value<DateTime>();
+                case JTokenType.Guid:
+                    return token.Value<string>();
+                case JTokenType.Array:
                     return "[array]";
-                case JsonValueKind.Object:
+                case JTokenType.Object:
                     return "{object}";
                 default:
-                    return null;
+                    return token.Value<string>();
             }
         }
     }

@@ -50,11 +50,11 @@ namespace ExcelEditorAddIn
             using (var reader = new StreamReader(openFileDialog.OpenFile()))
             {
                 var jsonText = reader.ReadToEnd();
-                var baseDocument = new JsonBaseDocument(jsonText);
-                if (baseDocument.Type == DocumentType.Table)
+                var baseElement = new JsonBaseElement(jsonText);
+                if (baseElement.Type == ElementType.Table)
                 {
-                    var jsonTableDocument = new JsonTableDocument(baseDocument);
-                    var tableWorksheet = new TableWorkbook(jsonTableDocument, filePath);
+                    var jsonTableElement = new JsonTableElement(baseElement);
+                    var tableWorksheet = new TableWorkbook(jsonTableElement, filePath);
                     _workbookData.Add(tableWorksheet);
                     tableWorksheet.OpenFile();
                 }
