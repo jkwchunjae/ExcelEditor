@@ -190,7 +190,8 @@
     <Compile Include="ExcelEditorRibbon.Designer.cs">
       <DependentUpon>ExcelEditorRibbon.cs</DependentUpon>
     </Compile>
-    <Compile Include="TableWorksheet.cs" />
+    <Compile Include="Workbook\BaseWorkbook.cs" />
+    <Compile Include="Workbook\TableWorkbook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
