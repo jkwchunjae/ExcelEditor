@@ -26,9 +26,9 @@ namespace ExcelEditorAddIn
             // values
             if (tableDocument.Any)
             {
-                Excel.Range minCell = sheet.Cells[2, 1];
-                Excel.Range maxCell = sheet.Cells[1 + tableDocument.Length, tableDocument.Keys.Count];
-                Excel.Range valuesRange = sheet.get_Range(minCell.Address, maxCell.Address);
+                var minCell = sheet.Cell(2, 1);
+                var maxCell = sheet.Cell(1 + tableDocument.Length, tableDocument.Keys.Count);
+                Excel.Range valuesRange = sheet.Range[minCell, maxCell];
                 valuesRange.Value2 = tableDocument.Values;
             }
 

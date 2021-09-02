@@ -194,7 +194,8 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WorkbookExtensions.cs" />
+    <Compile Include="Extensions\WorkbookExtensions.cs" />
+    <Compile Include="Extensions\WorksheetExtensions.cs" />
     <EmbeddedResource Include="ExcelEditorRibbon.resx">
       <DependentUpon>ExcelEditorRibbon.cs</DependentUpon>
     </EmbeddedResource>
@@ -242,6 +243,7 @@
       <Name>EeJson</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
