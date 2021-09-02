@@ -37,7 +37,8 @@ namespace ExcelEditorAddIn
         {
             this.tab1 = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
-            this.button1 = this.Factory.CreateRibbonButton();
+            this.JsonOpenButton = this.Factory.CreateRibbonButton();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.SuspendLayout();
@@ -51,14 +52,19 @@ namespace ExcelEditorAddIn
             // 
             // group1
             // 
-            this.group1.Items.Add(this.button1);
+            this.group1.Items.Add(this.JsonOpenButton);
             this.group1.Label = "group1";
             this.group1.Name = "group1";
             // 
-            // button1
+            // JsonOpenButton
             // 
-            this.button1.Label = "button1";
-            this.button1.Name = "button1";
+            this.JsonOpenButton.Label = "Open";
+            this.JsonOpenButton.Name = "JsonOpenButton";
+            this.JsonOpenButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.JsonOpenButton_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // ExcelEditorRibbon
             // 
@@ -78,7 +84,8 @@ namespace ExcelEditorAddIn
 
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton JsonOpenButton;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 
     partial class ThisRibbonCollection
