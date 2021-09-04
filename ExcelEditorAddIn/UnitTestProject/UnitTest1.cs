@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 
 namespace UnitTestProject
 {
@@ -23,10 +24,10 @@ namespace UnitTestProject
             var tableDocument = new JsonTableElement(baseElement);
 
             Assert.AreEqual(2, tableDocument.Length);
-            Assert.AreEqual(3, tableDocument.Keys.Count);
-            Assert.IsTrue(tableDocument.Keys.Contains("Name"));
-            Assert.IsTrue(tableDocument.Keys.Contains("Power"));
-            Assert.IsTrue(tableDocument.Keys.Contains("Price"));
+            Assert.AreEqual(3, tableDocument.Properties.Count());
+            Assert.IsTrue(tableDocument.Properties.Any(x => x.PropertyName == "Name"));
+            Assert.IsTrue(tableDocument.Properties.Any(x => x.PropertyName == "Power"));
+            Assert.IsTrue(tableDocument.Properties.Any(x => x.PropertyName == "Price"));
         }
 
         [TestMethod]

@@ -10,9 +10,13 @@ namespace EeJson
 {
     public class JsonObjectElement : JsonBaseElement, IObjectElement
     {
-        public List<string> Keys => throw new NotImplementedException();
-
         private JObject JObject;
+        public IReadOnlyDictionary<string, IElement> Properties
+            => JObject.Properties()
+                .Select(x => new { x.Name, Value = x.Value.ToJsonElement(), })
+                .ToDictionary(x => x.Name, x => (IElement)x.Value);
+        public IEnumerable<string> Keys
+            => Properties.Select(x => x.Key).ToList();
 
         public JsonObjectElement(JObject obj)
             : base(obj)
@@ -23,6 +27,17 @@ namespace EeJson
             : base(baseElement.Token)
         {
             JObject = (JObject)baseElement.Token;
+        }
+
+        public void Add(string key, IElement value)
+        {
+            var jsonBaseElement = (JsonBaseElement)value;
+            JObject.Add(key, jsonBaseElement.Token);
+        }
+
+        public void Remove(string key)
+        {
+            JObject.Remove(key);
         }
     }
 }
