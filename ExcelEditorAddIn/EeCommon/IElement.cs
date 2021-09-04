@@ -8,6 +8,7 @@ namespace EeCommon
 {
     public enum ElementType
     {
+        Null,
         Value,
         Array,
         Object,
@@ -15,15 +16,29 @@ namespace EeCommon
         Table,
     }
 
+    public enum ValueType
+    {
+        Null,
+        String,
+        Integer,
+        Boolean,
+        DateTime,
+        Float,
+    }
+
     public interface IElement
     {
         ElementType Type { get; }
-        object GetValue();
-        string GetJsonText();
+        object GetExcelValue();
+        string GetSaveText();
+        IValueElement CreateValueElement(object value, object value2);
+        IValueElement CreateValueElement(object value, object value2, ValueType valueType);
     }
 
-    public interface IValueElement
+    public interface IValueElement : IElement
     {
+        ValueType ValueType { get; }
+        void UpdateValue(object value, object value2);
     }
 
     public interface IArrayElement : IElement
@@ -31,17 +46,31 @@ namespace EeCommon
         int Length { get; }
         bool Any { get; }
         bool Empty { get; }
+
+        IEnumerable<IValueElement> Elements { get; }
+
+        void Add(IElement element);
+        void AddAt(int index, IElement element);
+        void RemoveAt(int index);
     }
 
     public interface IObjectElement : IElement
     {
-        List<string> Keys { get; }
+        IReadOnlyDictionary<string, IElement> Properties { get; }
+        void Add(string key, IElement value);
+        void Remove(string key);
     }
 
-    public interface ITableElement : IElement, IArrayElement
+    public interface ITableElement : IElement
     {
-        List<string> Keys { get; }
-        object[,] Values { get; }
-        IElement[,] Elements { get; }
+        int Length { get; }
+        bool Any { get; }
+        bool Empty { get; }
+        IEnumerable<IObjectElement> Elements { get; }
+        IEnumerable<(string PropertyName, ElementType ElementType)> Properties { get; }
+
+        void Add(IObjectElement objectElement);
+        void AddAt(int index, IObjectElement objectElement);
+        void RemoveAt(int index);
     }
 }

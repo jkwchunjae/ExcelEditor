@@ -1,6 +1,5 @@
 ﻿using EeCommon;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +27,29 @@ namespace EeJson
             return _primitiveTypes.Contains(tokenType);
         }
 
+        public static ValueType ToValueType(this JTokenType tokenType)
+        {
+            switch (tokenType)
+            {
+                case JTokenType.Null:
+                    return ValueType.Null;
+                case JTokenType.Boolean:
+                    return ValueType.Boolean;
+                case JTokenType.Integer:
+                    return ValueType.Integer;
+                case JTokenType.Float:
+                    return ValueType.Float;
+                case JTokenType.String:
+                    return ValueType.String;
+                case JTokenType.Date:
+                    return ValueType.DateTime;
+                case JTokenType.TimeSpan:
+                    return ValueType.DateTime;
+                default:
+                    return ValueType.String;
+            }
+        }
+
         public static object ToExcelValue(this JToken token)
         {
             switch (token.Type)
@@ -43,7 +65,7 @@ namespace EeJson
                 case JTokenType.String:
                     return token.Value<string>();
                 case JTokenType.Date:
-                    return token.Value<DateTime>();
+                    return token.Value<System.DateTime>();
                 case JTokenType.Guid:
                     return token.Value<string>();
                 case JTokenType.Array:
@@ -70,6 +92,31 @@ namespace EeJson
                 default:
                     return new JsonValueElement(baseElement);
             }
+        }
+
+        public static JValue CreateJValue(object value, object value2)
+        {
+            if (value == null)
+            {
+                return new JValue((string)null);
+            }
+            else
+            {
+                string valueText = value.ToString();
+                if (long.TryParse(valueText, out var longValue))
+                {
+                    return new JValue(longValue);
+                }
+                else
+                {
+                    return new JValue(valueText);
+                }
+            }
+        }
+
+        public static JValue CreateJValue(object value, object value2, ValueType valueType)
+        {
+            return CreateJValue(value, value2);
         }
     }
 }

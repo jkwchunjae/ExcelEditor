@@ -15,7 +15,7 @@ namespace ExcelEditorAddIn
         public BaseWorkbook Workbook { get; }
         public Excel.Worksheet Worksheet { get; }
 
-        protected List<(Excel.Range Cell, IElement Element)> Elements { get; } = new List<(Excel.Range, IElement)>();
+        protected List<(Excel.Range Cell, IElement Element)> Elements;
 
         public BaseWorksheet(IElement element, BaseWorkbook workbook, Excel.Worksheet worksheet)
         {

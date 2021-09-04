@@ -2,7 +2,6 @@
 using JkwExtensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,15 +46,29 @@ namespace EeJson
             return ElementType.Value;
         }
 
-        public object GetValue()
+        public object GetExcelValue()
         {
             return Token.ToExcelValue();
         }
 
-        public string GetJsonText()
+        public string GetSaveText()
         {
             var jsonText = JsonConvert.SerializeObject(Token, Formatting.Indented);
             return jsonText;
+        }
+
+        public IValueElement CreateValueElement(object value, object value2)
+        {
+            var jvalue = JsonExtensions.CreateJValue(value, value2);
+            var valueElement = new JsonValueElement(jvalue);
+            return valueElement;
+        }
+
+        public IValueElement CreateValueElement(object value, object value2, ValueType valueType)
+        {
+            var jvalue = JsonExtensions.CreateJValue(value, value2, valueType);
+            var valueElement = new JsonValueElement(jvalue);
+            return valueElement;
         }
     }
 }

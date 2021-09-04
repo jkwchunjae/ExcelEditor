@@ -17,6 +17,8 @@ namespace ExcelEditorAddIn
             : base(tableElement, jsonFilePath)
         {
             TableElement = tableElement;
+
+            WorkbookCreated += TableWorkbook_WorkbookCreated;
         }
 
         public override void Open()
@@ -26,6 +28,15 @@ namespace ExcelEditorAddIn
             MainWorksheet = new TableWorksheet(TableElement, this, Workbook.SheetList().First());
 
             Workbook.Activate();
+        }
+
+        private void TableWorkbook_WorkbookCreated(object sender, Excel.Workbook workbook)
+        {
+            AttachEvents();
+        }
+
+        private void AttachEvents()
+        {
         }
     }
 }
