@@ -43,22 +43,47 @@ namespace ExcelEditorAddIn
 
             if (AlreadyOpened(filePath, out var workbookData))
             {
-                workbookData.Workbook.Activate();
-                return;
+                try
+                {
+                    workbookData.Workbook.Activate();
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    _workbookData.Remove(workbookData);
+                    MessageBox.Show(ex.Message);
+                }
             }
 
             using (var reader = new StreamReader(openFileDialog.OpenFile()))
             {
-                var jsonText = reader.ReadToEnd();
-                var baseElement = new JsonBaseElement(jsonText);
-                if (baseElement.Type == ElementType.Table)
-                {
-                    var jsonTableElement = new JsonTableElement(baseElement);
-                    workbookData = new TableWorkbook(jsonTableElement, filePath);
-                    _workbookData.Add(workbookData);
-                    workbookData.Open();
-                }
+                var text = reader.ReadToEnd();
+
+                // if json format
+                OpenJson(text, filePath);
             }
+        }
+
+        private void OpenJson(string jsonText, string filePath)
+        {
+            var baseElement = new JsonBaseElement(jsonText);
+
+            if (baseElement.Type == ElementType.Table)
+            {
+                var jsonTableElement = new JsonTableElement(baseElement);
+                OpenJsonTable(jsonTableElement, filePath);
+            }
+        }
+
+        private void OpenJsonTable(JsonTableElement jsonTableElement, string filePath)
+        {
+            var workbookData = new TableWorkbook(jsonTableElement, filePath);
+            workbookData.Open();
+            workbookData.Save();
+            workbookData.AttachEvents();
+            workbookData.Closed += (_s, wData) => _workbookData.Remove(wData);
+
+            _workbookData.Add(workbookData);
         }
 
 

@@ -181,6 +181,7 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="Config\PathOf.cs" />
     <Compile Include="ExcelEditorRibbon.cs">
       <SubType>Component</SubType>
     </Compile>

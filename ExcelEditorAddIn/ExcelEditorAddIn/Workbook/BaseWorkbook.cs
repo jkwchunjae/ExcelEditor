@@ -1,6 +1,7 @@
 ﻿using EeCommon;
 using System;
 using System.IO;
+using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ExcelEditorAddIn
@@ -13,7 +14,11 @@ namespace ExcelEditorAddIn
         public Excel.Workbook Workbook { get; protected set; }
         public BaseWorksheet MainWorksheet { get; protected set;  }
 
+        protected bool Dirty = false;
+
+
         public event EventHandler<Excel.Workbook> WorkbookCreated;
+        public event EventHandler<BaseWorkbook> Closed;
 
         public BaseWorkbook(IElement element, string jsonFilePath)
         {
@@ -26,22 +31,60 @@ namespace ExcelEditorAddIn
         protected Excel.Workbook MakeWorkbook()
         {
             Workbook = Globals.ThisAddIn.Application.Workbooks.Add();
+            CreateWorkbookFile();
 
             WorkbookCreated?.Invoke(this, Workbook);
-            AttachEvents();
 
             return Workbook;
         }
 
-        private void AttachEvents()
+        private void CreateWorkbookFile()
+        {
+            var workbookPath = PathOf.TemporaryFilePath(Path.GetFileNameWithoutExtension(JsonFilePath));
+            if (!Directory.Exists(PathOf.LocalRootDirectory))
+            {
+                Directory.CreateDirectory(PathOf.LocalRootDirectory);
+            }
+
+            if (File.Exists(workbookPath))
+            {
+                try
+                {
+                    File.Delete(workbookPath);
+                }
+                catch
+                {
+                    MessageBox.Show("Opened another file.");
+                    throw;
+                }
+            }
+
+            Workbook.SaveAs(workbookPath);
+        }
+
+        public void Save()
+        {
+            Workbook.Save();
+        }
+
+        public void AttachEvents()
         {
             Workbook.BeforeSave += Workbook_BeforeSave;
+            Workbook.BeforeClose += Workbook_BeforeClose;
         }
 
         private void Workbook_BeforeSave(bool SaveAsUI, ref bool Cancel)
         {
-            var text = Element.GetSaveText();
-            File.WriteAllText(JsonFilePath, text);
+            if (Dirty)
+            {
+                var text = Element.GetSaveText();
+                File.WriteAllText(JsonFilePath, text);
+            }
+        }
+
+        private void Workbook_BeforeClose(ref bool Cancel)
+        {
+            Closed?.Invoke(this, this);
         }
     }
 }
