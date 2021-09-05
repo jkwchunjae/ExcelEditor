@@ -32,11 +32,6 @@ namespace ExcelEditorAddIn
 
         private void TableWorkbook_WorkbookCreated(object sender, Excel.Workbook workbook)
         {
-            AttachEvents();
-        }
-
-        private void AttachEvents()
-        {
         }
     }
 }
