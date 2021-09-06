@@ -1,4 +1,5 @@
 ﻿using EeCommon;
+using JkwExtensions;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,6 +108,10 @@ namespace EeJson
                 {
                     return new JValue(longValue);
                 }
+                else if (double.TryParse(valueText, out var doubleValue))
+                {
+                    return new JValue(doubleValue);
+                }
                 else
                 {
                     return new JValue(valueText);
@@ -116,7 +121,31 @@ namespace EeJson
 
         public static JValue CreateJValue(object value, object value2, ValueType valueType)
         {
-            return CreateJValue(value, value2);
+            if (value == null)
+            {
+                return new JValue((string)null);
+            }
+            else
+            {
+                string valueText = value.ToString();
+                switch (valueType)
+                {
+                    case ValueType.Integer:
+                    case ValueType.Float:
+                        {
+                            if (long.TryParse(valueText, out var longValue))
+                            {
+                                return new JValue(longValue);
+                            }
+                            else if (double.TryParse(valueText, out var doubleValue))
+                            {
+                                return new JValue(doubleValue);
+                            }
+                            throw new RequireNumberException();
+                        }
+                }
+                return new JValue(valueText);
+            }
         }
     }
 }

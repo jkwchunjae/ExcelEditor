@@ -75,6 +75,8 @@ namespace ExcelEditorAddIn
                 return;
             }
 
+            object previousValue = null;
+
             try
             {
                 if (TryGetExistElement(Target, out var element))
@@ -83,6 +85,7 @@ namespace ExcelEditorAddIn
                     if (element.Type == ElementType.Value)
                     {
                         var valueElement = (IValueElement)element;
+                        previousValue = valueElement.GetExcelValue();
                         valueElement.UpdateValue((object)Target.Value, (object)Target.Value2);
                         OnChange();
                     }
@@ -104,6 +107,11 @@ namespace ExcelEditorAddIn
                     {
                     }
                 }
+            }
+            catch (RequireNumberException)
+            {
+                MessageBox.Show("숫자 형식을 입력해야 합니다.");
+                Target.Value = previousValue;
             }
             catch (Exception ex)
             {
