@@ -26,6 +26,7 @@ namespace ExcelEditorAddIn
             MakeWorkbook();
 
             MainWorksheet = new TableWorksheet(TableElement, this, Workbook.SheetList().First());
+            MainWorksheet.Changed += (s, a) => Dirty = true;
 
             Workbook.Activate();
         }
