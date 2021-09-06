@@ -17,6 +17,8 @@ namespace ExcelEditorAddIn
 
         protected List<(Excel.Range Cell, IElement Element)> Elements;
 
+        public event EventHandler Changed;
+
         public BaseWorksheet(IElement element, BaseWorkbook workbook, Excel.Worksheet worksheet)
         {
             Element = element;
@@ -46,7 +48,11 @@ namespace ExcelEditorAddIn
             }
             element = null;
             return false;
+        }
 
+        protected void OnChange()
+        {
+            Changed?.Invoke(this, null);
         }
     }
 }

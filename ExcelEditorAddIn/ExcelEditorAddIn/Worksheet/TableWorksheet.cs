@@ -84,6 +84,7 @@ namespace ExcelEditorAddIn
                     {
                         var valueElement = (IValueElement)element;
                         valueElement.UpdateValue((object)Target.Value, (object)Target.Value2);
+                        OnChange();
                     }
                     else // Array, Object, Table
                     {
@@ -97,6 +98,7 @@ namespace ExcelEditorAddIn
                     {
                         IElement newValue = TableElement.CreateValueElement((object)Target.Value, (object)Target.Value2);
                         parentObject.Add(fieldName, newValue);
+                        OnChange();
                     }
                     else // Array, Object, Table
                     {
