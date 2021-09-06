@@ -27,7 +27,7 @@ namespace EeJson
             }
             else
             {
-                JValue jValue = JsonExtensions.CreateJValue(value, value2);
+                JValue jValue = JsonExtensions.CreateJValue(value, value2, ValueType);
                 JValue.Value = jValue.Value;
             }
         }
