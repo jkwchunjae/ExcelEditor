@@ -210,6 +210,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="app.config" />
+    <None Include="ExcelEditorAddIn_1_TemporaryKey.pfx" />
     <None Include="ExcelEditorAddIn_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -253,10 +254,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ExcelEditorAddIn_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ExcelEditorAddIn_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>45BA52B2203B88EEF53FDAEDEED5AB19BCEB414F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>CE2971F8B469FB3E63719E17298264F3B150493B</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
