@@ -113,6 +113,11 @@ namespace ExcelEditorAddIn
                 MessageBox.Show("숫자 형식을 입력해야 합니다.");
                 Target.Value = previousValue;
             }
+            catch (RequireBooleanException)
+            {
+                MessageBox.Show("BOOL 형식(true, false)을 입력해야 합니다.");
+                Target.Value = previousValue;
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);

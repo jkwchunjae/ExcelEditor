@@ -112,6 +112,10 @@ namespace EeJson
                 {
                     return new JValue(doubleValue);
                 }
+                else if (bool.TryParse(valueText, out var boolValue))
+                {
+                    return new JValue(boolValue);
+                }
                 else
                 {
                     return new JValue(valueText);
@@ -141,7 +145,15 @@ namespace EeJson
                             {
                                 return new JValue(doubleValue);
                             }
-                            throw new RequireNumberException();
+                            throw new RequireNumberException(value, value2);
+                        }
+                    case ValueType.Boolean:
+                        {
+                            if (bool.TryParse(valueText, out var boolValue))
+                            {
+                                return new JValue(boolValue);
+                            }
+                            throw new RequireBooleanException(value, value2);
                         }
                 }
                 return new JValue(valueText);
