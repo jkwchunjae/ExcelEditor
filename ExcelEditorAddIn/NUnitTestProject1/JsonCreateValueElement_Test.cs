@@ -56,5 +56,52 @@ namespace NUnitTestProject1
 
             Assert.AreEqual(ValueType.Integer, v.ValueType);
         }
+
+        [Test]
+        public void CreateValueElement_bool1()
+        {
+            var v = _e.CreateValueElement(true, true);
+
+            Assert.AreEqual(ValueType.Boolean, v.ValueType);
+        }
+
+        [Test]
+        public void CreateValueElement_bool2()
+        {
+            var v = _e.CreateValueElement(true, true, ValueType.Boolean);
+
+            Assert.AreEqual(ValueType.Boolean, v.ValueType);
+        }
+
+        [Test]
+        public void CreateValueElement_bool3()
+        {
+            var v = _e.CreateValueElement("TRUE", "TRUE", ValueType.Boolean);
+
+            Assert.AreEqual(ValueType.Boolean, v.ValueType);
+        }
+
+        [Test]
+        public void CreateValueElement_bool4()
+        {
+            var v = _e.CreateValueElement("false", "false", ValueType.Boolean);
+
+            Assert.AreEqual(ValueType.Boolean, v.ValueType);
+        }
+
+        [Test]
+        public void CreateValueElement_throw_RequireBooleanException()
+        {
+            try
+            {
+                var v = _e.CreateValueElement("text", "text", ValueType.Boolean);
+
+                Assert.Fail($"{nameof(RequireBooleanException)} 예외가 발생하지 않았습니다.");
+            }
+            catch (RequireBooleanException)
+            {
+                Assert.Pass($"{nameof(RequireBooleanException)} 예외가 정상적으로 발생했습니다.");
+            }
+        }
     }
 }

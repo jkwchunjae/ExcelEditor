@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\RequireNumberException.cs" />
+    <Compile Include="Exceptions\ValueConvertException.cs" />
     <Compile Include="IElement.cs" />
     <Compile Include="ITableElementExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
