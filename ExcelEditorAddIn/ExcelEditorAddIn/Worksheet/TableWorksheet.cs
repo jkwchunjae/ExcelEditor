@@ -69,6 +69,16 @@ namespace ExcelEditorAddIn
 
         private void Worksheet_Change(Excel.Range Target)
         {
+            foreach (Excel.Range cell in Target.Cells)
+            {
+                WorksheetChanged(cell);
+            }
+        }
+
+        /// <summary> cell의 변경을 element에 반영한다.  </summary>
+        /// <param name="Target">변경된 셀: 반드시 셀 하나여야한다.</param>
+        private void WorksheetChanged(Excel.Range Target)
+        {
             if (IsInArea(Target) == false)
             {
                 // 영역 바깥을 수정한 경우
