@@ -48,7 +48,10 @@ namespace EeJson
 
         public object GetExcelValue()
         {
-            return Token.ToExcelValue();
+            if (Type == ElementType.Table)
+                return "[table]";
+            else
+                return Token.ToExcelValue();
         }
 
         public string GetSaveText()
