@@ -76,10 +76,10 @@ namespace ExcelEditorAddIn
         }
 
         /// <summary> cell의 변경을 element에 반영한다.  </summary>
-        /// <param name="Target">변경된 셀: 반드시 셀 하나여야한다.</param>
-        private void WorksheetChanged(Excel.Range Target)
+        /// <param name="cell">변경된 셀: 반드시 셀 하나여야한다.</param>
+        private void WorksheetChanged(Excel.Range cell)
         {
-            if (IsInArea(Target) == false)
+            if (IsInArea(cell) == false)
             {
                 // 영역 바깥을 수정한 경우
                 return;
@@ -89,27 +89,27 @@ namespace ExcelEditorAddIn
 
             try
             {
-                if (TryGetExistElement(Target, out var element))
+                if (TryGetExistElement(cell, out var element))
                 {
                     // 이미 있는 값을 수정하는 경우
                     if (element.Type == ElementType.Value)
                     {
                         var valueElement = (IValueElement)element;
                         previousValue = valueElement.GetExcelValue();
-                        valueElement.UpdateValue((object)Target.Value, (object)Target.Value2);
+                        valueElement.UpdateValue((object)cell.Value, (object)cell.Value2);
                         OnChange();
                     }
                     else // Array, Object, Table
                     {
                     }
                 }
-                else if (TryGetElementInfo(Target, out var parentObject, out var fieldName, out var elementType))
+                else if (TryGetElementInfo(cell, out var parentObject, out var fieldName, out var elementType))
                 {
                     // 없던 값을 새로 쓰는 경우
                     // 부모 객체 정보를 얻어온다.
                     if (elementType == ElementType.Value)
                     {
-                        IElement newValue = TableElement.CreateValueElement((object)Target.Value, (object)Target.Value2);
+                        IElement newValue = TableElement.CreateValueElement((object)cell.Value, (object)cell.Value2);
                         parentObject.Add(fieldName, newValue);
                         OnChange();
                     }
@@ -121,12 +121,12 @@ namespace ExcelEditorAddIn
             catch (RequireNumberException)
             {
                 MessageBox.Show("숫자 형식을 입력해야 합니다.");
-                Target.Value = previousValue;
+                cell.Value = previousValue;
             }
             catch (RequireBooleanException)
             {
                 MessageBox.Show("BOOL 형식(true, false)을 입력해야 합니다.");
-                Target.Value = previousValue;
+                cell.Value = previousValue;
             }
             catch (Exception ex)
             {
