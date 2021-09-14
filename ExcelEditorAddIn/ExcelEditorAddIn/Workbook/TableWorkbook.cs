@@ -13,8 +13,8 @@ namespace ExcelEditorAddIn
     public class TableWorkbook : BaseWorkbook
     {
         public ITableElement TableElement { get; private set; }
-        public TableWorkbook(ITableElement tableElement, string jsonFilePath)
-            : base(tableElement, jsonFilePath)
+        public TableWorkbook(ITableElement tableElement, string filePath)
+            : base(tableElement, filePath)
         {
             TableElement = tableElement;
 

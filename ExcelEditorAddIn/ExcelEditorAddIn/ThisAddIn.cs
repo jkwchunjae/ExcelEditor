@@ -27,7 +27,7 @@ namespace ExcelEditorAddIn
 
         private bool AlreadyOpened(string jsonFilePath, out BaseWorkbook workbookData)
         {
-            var found = _workbookData.FirstOrDefault(x => x.JsonFilePath == jsonFilePath);
+            var found = _workbookData.FirstOrDefault(x => x.FilePath == jsonFilePath);
             workbookData = null;
             if (found != null)
             {
@@ -75,9 +75,9 @@ namespace ExcelEditorAddIn
             }
         }
 
-        private void OpenJsonTable(JsonTableElement jsonTableElement, string filePath)
+        private void OpenJsonTable(JsonTableElement jsonTableElement, string jsonFilePath)
         {
-            var workbookData = new TableWorkbook(jsonTableElement, filePath);
+            var workbookData = new TableWorkbook(jsonTableElement, jsonFilePath);
             workbookData.Open();
             workbookData.Save();
             workbookData.AttachEvents();

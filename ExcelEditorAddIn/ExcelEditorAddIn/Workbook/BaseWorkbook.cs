@@ -9,7 +9,7 @@ namespace ExcelEditorAddIn
     public class BaseWorkbook
     {
         public ElementType ElementType => Element.Type;
-        public string JsonFilePath { get; protected set; }
+        public string FilePath { get; protected set; }
         public IElement Element { get; protected set; }
         public Excel.Workbook Workbook { get; protected set; }
         public BaseWorksheet MainWorksheet { get; protected set;  }
@@ -20,9 +20,9 @@ namespace ExcelEditorAddIn
         public event EventHandler<Excel.Workbook> WorkbookCreated;
         public event EventHandler<BaseWorkbook> Closed;
 
-        public BaseWorkbook(IElement element, string jsonFilePath)
+        public BaseWorkbook(IElement element, string filePath)
         {
-            JsonFilePath = jsonFilePath;
+            FilePath = filePath;
             Element = element;
         }
 
@@ -40,7 +40,7 @@ namespace ExcelEditorAddIn
 
         private void CreateWorkbookFile()
         {
-            var workbookPath = PathOf.TemporaryFilePath(Path.GetFileNameWithoutExtension(JsonFilePath));
+            var workbookPath = PathOf.TemporaryFilePath(Path.GetFileNameWithoutExtension(FilePath));
             if (!Directory.Exists(PathOf.LocalRootDirectory))
             {
                 Directory.CreateDirectory(PathOf.LocalRootDirectory);
@@ -84,7 +84,7 @@ namespace ExcelEditorAddIn
             if (Dirty)
             {
                 var text = Element.GetSaveText();
-                File.WriteAllText(JsonFilePath, text);
+                File.WriteAllText(FilePath, text);
                 Dirty = false;
             }
         }
