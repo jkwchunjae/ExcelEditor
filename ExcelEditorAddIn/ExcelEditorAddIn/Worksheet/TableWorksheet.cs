@@ -118,14 +118,14 @@ namespace ExcelEditorAddIn
                     }
                 }
             }
-            catch (RequireNumberException)
+            catch (RequireNumberException ex)
             {
-                MessageBox.Show("숫자 형식을 입력해야 합니다.");
+                MessageBox.Show(ex.Message);
                 cell.Value = previousValue;
             }
-            catch (RequireBooleanException)
+            catch (RequireBooleanException ex)
             {
-                MessageBox.Show("BOOL 형식(true, false)을 입력해야 합니다.");
+                MessageBox.Show(ex.Message);
                 cell.Value = previousValue;
             }
             catch (Exception ex)
