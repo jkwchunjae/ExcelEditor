@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EeCommon\EeCommon.csproj" />
     <ProjectReference Include="..\EeJson\EeJson.csproj" />
+    <ProjectReference Include="..\ExcelEditorAddIn\ExcelEditorAddIn.csproj" />
   </ItemGroup>
 
 </Project>

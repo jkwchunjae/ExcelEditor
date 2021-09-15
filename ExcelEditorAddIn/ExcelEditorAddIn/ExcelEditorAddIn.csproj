@@ -182,12 +182,15 @@
   -->
   <ItemGroup>
     <Compile Include="Config\PathOf.cs" />
+    <Compile Include="ContextMenu\ContextMenu.cs" />
+    <Compile Include="ContextMenu\ContextMenuInfo.cs" />
     <Compile Include="ExcelEditorRibbon.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ExcelEditorRibbon.Designer.cs">
       <DependentUpon>ExcelEditorRibbon.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\Utils.cs" />
     <Compile Include="Workbook\BaseWorkbook.cs" />
     <Compile Include="Workbook\TableWorkbook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

@@ -1,5 +1,6 @@
 ﻿using EeCommon;
 using JkwExtensions;
+using Microsoft.Office.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,7 +65,21 @@ namespace ExcelEditorAddIn
         private void AttachEvents()
         {
             Worksheet.BeforeDoubleClick += Worksheet_BeforeDoubleClick;
+            //Worksheet.BeforeRightClick += Worksheet_BeforeRightClick;
             Worksheet.Change += Worksheet_Change;
+        }
+
+        private void Worksheet_BeforeRightClick(Excel.Range Target, ref bool Cancel)
+        {
+            var barPopup = new List<CommandBar>();
+            var bars = Globals.ThisAddIn.Application.CommandBars;
+            foreach (CommandBar bar in bars)
+            {
+                if (bar.Position == MsoBarPosition.msoBarPopup)
+                    barPopup.Add(bar);
+            }
+            barPopup.RandomShuffle().First().ShowPopup();
+            Cancel = true;
         }
 
         private void Worksheet_Change(Excel.Range Target)
