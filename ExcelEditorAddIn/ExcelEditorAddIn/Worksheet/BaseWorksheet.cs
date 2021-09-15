@@ -24,6 +24,59 @@ namespace ExcelEditorAddIn
             Element = element;
             Workbook = workbook;
             Worksheet = worksheet;
+
+            AttachEvents_Base();
+        }
+
+        private void AttachEvents_Base()
+        {
+            Worksheet.BeforeRightClick += Worksheet_BeforeRightClick_Base;
+        }
+
+        private void Worksheet_BeforeRightClick_Base(Excel.Range Target, ref bool Cancel)
+        {
+            var contextMenuInfo = ContextMenu.Make(Target.Address);
+
+            if (contextMenuInfo == null)
+            {
+                Cancel = true;
+                return;
+            }
+            switch (contextMenuInfo)
+            {
+                case SingleCellMenuInfo info:
+                    Cancel = BeforeSingleCellRightClick(info);
+                    break;
+                case CellsMenuInfo info:
+                    Cancel = BeforeCellsRightClick(info);
+                    break;
+                case ColumnMenuInfo info:
+                    Cancel = BeforeColumnRightClick(info);
+                    break;
+                case RowMenuInfo info:
+                    Cancel = BeforeRowRightClick(info);
+                    break;
+            }
+        }
+
+        protected virtual bool BeforeSingleCellRightClick(SingleCellMenuInfo info)
+        {
+            return false;
+        }
+
+        protected virtual bool BeforeCellsRightClick(CellsMenuInfo info)
+        {
+            return false;
+        }
+
+        protected virtual bool BeforeColumnRightClick(ColumnMenuInfo info)
+        {
+            return false;
+        }
+
+        protected virtual bool BeforeRowRightClick(RowMenuInfo info)
+        {
+            return false;
         }
 
         protected bool TryGetElement(Excel.Range cell, out IElement element)
