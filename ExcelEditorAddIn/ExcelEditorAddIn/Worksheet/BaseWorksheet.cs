@@ -1,4 +1,5 @@
 ﻿using EeCommon;
+using Microsoft.Office.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace ExcelEditorAddIn
         public IElement Element { get; }
         public BaseWorkbook Workbook { get; }
         public Excel.Worksheet Worksheet { get; }
+        protected CommandBars CommandBars => Globals.ThisAddIn.Application.CommandBars;
 
         protected List<(Excel.Range Cell, IElement Element)> Elements;
 
@@ -35,7 +37,7 @@ namespace ExcelEditorAddIn
 
         private void Worksheet_BeforeRightClick_Base(Excel.Range Target, ref bool Cancel)
         {
-            var contextMenuInfo = ContextMenu.Make(Target.Address);
+            var contextMenuInfo = ContextMenuInfo.Make(Target.Address);
 
             if (contextMenuInfo == null)
             {
@@ -100,6 +102,24 @@ namespace ExcelEditorAddIn
                 }
             }
             element = null;
+            return false;
+        }
+
+        protected bool IsInArea(Excel.Range cell)
+        {
+            // Elements 최대 최소 범위 안에 들어있어야 함.
+            var minRow = Elements.Min(x => x.Cell.Row);
+            var maxRow = Elements.Max(x => x.Cell.Row);
+            var minColumn = Elements.Min(x => x.Cell.Column);
+            var maxColumn = Elements.Max(x => x.Cell.Column);
+
+            if (cell.Row >= minRow && cell.Row <= maxRow)
+            {
+                if (cell.Column >= minColumn && cell.Column <= maxColumn)
+                {
+                    return true;
+                }
+            }
             return false;
         }
 

@@ -1,4 +1,5 @@
 ﻿using JkwExtensions;
+using Microsoft.Office.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,50 +9,44 @@ using System.Threading.Tasks;
 
 namespace ExcelEditorAddIn
 {
-    public static class ContextMenu
+    public interface IContextMenu
     {
-        public static ContextMenuInfo Make(string address)
+        string Name { get; }
+
+        void Show();
+    }
+
+    public class ContextMenu_Column : IContextMenu
+    {
+        public event EventHandler AddProperty;
+        public event EventHandler RemoveProperty;
+
+        public string Name { get; private set; }
+
+        private CommandBar _commandBar;
+
+        public ContextMenu_Column(CommandBar commandBar)
         {
-            // $E$7: SingleCell
-            // $F$4:$G$10: Cells
-            // $C:$C : Column
-            // $1:$1 : Row
+            Name = nameof(ContextMenu_Column);
 
-            var column = @"\$([A-Za-z]+)";
-            var row = @"\$(\d+)";
-            var cell = $@"{column}{row}"; // \$[A-Za-z]+\$\d+
+            _commandBar = commandBar;
+            CreateButtons();
+        }
 
-            var singleCellPattern = $@"^{cell}$";
-            if (Regex.IsMatch(address, singleCellPattern))
-            {
-                return new SingleCellMenuInfo(address);
-            }
+        private void CreateButtons()
+        {
+            var addPropertyButton = (CommandBarButton)_commandBar.Controls.Add(
+                Type: MsoControlType.msoControlButton,
+                Temporary: true);
+            addPropertyButton.Caption = "Add Property";
+            //addPropertyButton.FaceId = 2;// https://bettersolutions.com/vba/ribbon/face-ids-2003.htm
+            addPropertyButton.Click += (CommandBarButton button, ref bool Cancel)
+                => AddProperty?.Invoke(button, null);
+        }
 
-            var cellsPattern = $@"^{cell}\:{cell}$"; // ^\$[A-Za-z]+\$\d+\:\$[A-Za-z]+\$\d+$
-            if (Regex.IsMatch(address, cellsPattern))
-            {
-                return new CellsMenuInfo(address);
-            }
-
-            var rowPattern = $@"^{row}\:{row}$"; // ^\$\d+\:\$\d+$
-            if (Regex.IsMatch(address, rowPattern))
-            {
-                var match = Regex.Match(address, rowPattern);
-                var beginRow = match.Groups[1].Value.ToInt();
-                var endRow = match.Groups[2].Value.ToInt();
-                return new RowMenuInfo(address, beginRow, endRow);
-            }
-
-            var columnPattern = $@"^{column}\:{column}$"; // ^\$[A-Za-z]+\:\$[A-Za-z]+$
-            if (Regex.IsMatch(address, columnPattern))
-            {
-                var match = Regex.Match(address, columnPattern);
-                var beginColumn = match.Groups[1].Value;
-                var endColumn = match.Groups[2].Value;
-                return new ColumnMenuInfo(address, beginColumn, endColumn);
-            }
-
-            return new UnknownMenuInfo(address);
+        public void Show()
+        {
+            _commandBar.ShowPopup();
         }
     }
 }

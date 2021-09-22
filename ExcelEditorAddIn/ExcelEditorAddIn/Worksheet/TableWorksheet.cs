@@ -15,6 +15,9 @@ namespace ExcelEditorAddIn
 
         List<(string PropertyName, ElementType ElementType)> ColumnPropertyInfo = new List<(string PropertyName, ElementType ElementType)>();
 
+        ContextMenu_Column _columnContextMenu;
+        ColumnMenuInfo _columnMenuInfo;
+
         public TableWorksheet(ITableElement element, BaseWorkbook workbook, Excel.Worksheet worksheet)
             : base(element, workbook, worksheet)
         {
@@ -22,6 +25,7 @@ namespace ExcelEditorAddIn
 
             SpreadElement();
             AttachEvents();
+            CreateContextMenus();
         }
 
         private void SpreadElement()
@@ -69,17 +73,26 @@ namespace ExcelEditorAddIn
             Worksheet.Change += Worksheet_Change;
         }
 
-        private void Worksheet_BeforeRightClick(Excel.Range Target, ref bool Cancel)
+        private void CreateContextMenus()
         {
-            var barPopup = new List<CommandBar>();
-            var bars = Globals.ThisAddIn.Application.CommandBars;
-            foreach (CommandBar bar in bars)
-            {
-                if (bar.Position == MsoBarPosition.msoBarPopup)
-                    barPopup.Add(bar);
-            }
-            barPopup.RandomShuffle().First().ShowPopup();
-            Cancel = true;
+            _columnContextMenu = ContextMenuFactory.CreateColumnMenu(Guid.NewGuid().ToString());
+            _columnContextMenu.AddProperty += ColumnContextMenu_AddProperty;
+        }
+
+        private void ColumnContextMenu_AddProperty(object sender, EventArgs e)
+        {
+            var info = _columnMenuInfo;
+            if (info == null)
+                return;
+
+            MessageBox.Show($"{info.Address}_{info.BeginColumn}_{info.EndColumn}");
+        }
+
+        protected override bool BeforeColumnRightClick(ColumnMenuInfo info)
+        {
+            _columnMenuInfo = info;
+            _columnContextMenu.Show();
+            return true;
         }
 
         private void Worksheet_Change(Excel.Range Target)
@@ -187,24 +200,6 @@ namespace ExcelEditorAddIn
             objectElement = null;
             propertyName = null;
             elementType = ElementType.Null;
-            return false;
-        }
-
-        private bool IsInArea(Excel.Range cell)
-        {
-            // Elements 최대 최소 범위 안에 들어있어야 함.
-            var minRow = Elements.Min(x => x.Cell.Row);
-            var maxRow = Elements.Max(x => x.Cell.Row);
-            var minColumn = Elements.Min(x => x.Cell.Column);
-            var maxColumn = Elements.Max(x => x.Cell.Column);
-
-            if (cell.Row >= minRow && cell.Row <= maxRow)
-            {
-                if (cell.Column >= minColumn && cell.Column <= maxColumn)
-                {
-                    return true;
-                }
-            }
             return false;
         }
     }
