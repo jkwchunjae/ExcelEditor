@@ -1,6 +1,7 @@
 ﻿using EeCommon;
 using System;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -13,6 +14,8 @@ namespace ExcelEditorAddIn
         public IElement Element { get; protected set; }
         public Excel.Workbook Workbook { get; protected set; }
         public BaseWorksheet MainWorksheet { get; protected set;  }
+
+        protected Metadata Metadata { get; private set; }
 
         protected bool Dirty = false;
 
@@ -62,6 +65,30 @@ namespace ExcelEditorAddIn
             Workbook.SaveAs(workbookPath);
         }
 
+        protected bool TryOpenMetadata(out Metadata metadata)
+        {
+            var metadataPath = PathOf.MetadataFilePath(FilePath);
+
+            if (!Directory.Exists(metadataPath))
+            {
+                metadata = null;
+                return false;
+            }
+
+            try
+            {
+                var metadataText = File.ReadAllText(metadataPath, Encoding.UTF8);
+                metadata = Element.Deserialize<Metadata>(metadataText);
+                Metadata = metadata;
+                return true;
+            }
+            catch
+            {
+                metadata = null;
+                return false;
+            }
+        }
+
         public void Save()
         {
             Workbook.Save();
@@ -85,6 +112,12 @@ namespace ExcelEditorAddIn
             {
                 var text = Element.GetSaveText();
                 File.WriteAllText(FilePath, text);
+
+                if (Metadata != null)
+                {
+                    File.WriteAllText(PathOf.MetadataFilePath(FilePath), Element.Serialize(Metadata));
+                }
+
                 Dirty = false;
             }
         }

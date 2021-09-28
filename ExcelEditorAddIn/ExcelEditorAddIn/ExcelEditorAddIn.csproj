@@ -193,6 +193,7 @@
     </Compile>
     <Compile Include="Extensions\CommandBarsExtensions.cs" />
     <Compile Include="Extensions\Utils.cs" />
+    <Compile Include="Metadata\Metadata.cs" />
     <Compile Include="Workbook\BaseWorkbook.cs" />
     <Compile Include="Workbook\TableWorkbook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

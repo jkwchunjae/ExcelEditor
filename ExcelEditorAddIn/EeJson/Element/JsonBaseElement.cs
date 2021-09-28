@@ -73,5 +73,17 @@ namespace EeJson
             var valueElement = new JsonValueElement(jvalue);
             return valueElement;
         }
+
+        public T Deserialize<T>(string text)
+        {
+            var obj = JsonConvert.DeserializeObject<T>(text);
+            return obj;
+        }
+
+        public string Serialize<T>(T obj)
+        {
+            var text = JsonConvert.SerializeObject(obj, Formatting.Indented);
+            return text;
+        }
     }
 }

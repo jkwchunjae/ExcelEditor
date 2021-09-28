@@ -16,16 +16,18 @@ namespace ExcelEditorAddIn
         public BaseWorkbook Workbook { get; }
         public Excel.Worksheet Worksheet { get; }
         protected CommandBars CommandBars => Globals.ThisAddIn.Application.CommandBars;
+        protected Metadata Metadata { get; private set; }
 
         protected List<(Excel.Range Cell, IElement Element)> Elements;
 
         public event EventHandler Changed;
 
-        public BaseWorksheet(IElement element, BaseWorkbook workbook, Excel.Worksheet worksheet)
+        public BaseWorksheet(IElement element, BaseWorkbook workbook, Excel.Worksheet worksheet, Metadata metadata)
         {
             Element = element;
             Workbook = workbook;
             Worksheet = worksheet;
+            Metadata = metadata;
 
             AttachEvents_Base();
         }

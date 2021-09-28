@@ -18,8 +18,8 @@ namespace ExcelEditorAddIn
         ContextMenu_Column _columnContextMenu;
         ColumnMenuInfo _columnMenuInfo;
 
-        public TableWorksheet(ITableElement element, BaseWorkbook workbook, Excel.Worksheet worksheet)
-            : base(element, workbook, worksheet)
+        public TableWorksheet(ITableElement element, BaseWorkbook workbook, Excel.Worksheet worksheet, Metadata metadata)
+            : base(element, workbook, worksheet, metadata)
         {
             TableElement = element;
 
@@ -32,6 +32,7 @@ namespace ExcelEditorAddIn
         {
             var sheet = Worksheet;
             var table = TableElement;
+            var meta = Metadata;
 
             // title
             ColumnPropertyInfo = table.Properties.ToList();
