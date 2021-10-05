@@ -31,6 +31,7 @@ namespace ExcelEditorAddIn
                 element: TableElement,
                 workbook: this,
                 worksheet: Workbook.SheetList().First(),
+                path: "/",
                 metadata: metadata);
             MainWorksheet.Changed += (s, a) => Dirty = true;
 

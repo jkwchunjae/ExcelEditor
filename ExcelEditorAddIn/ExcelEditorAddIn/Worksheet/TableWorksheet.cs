@@ -13,35 +13,49 @@ namespace ExcelEditorAddIn
     {
         ITableElement TableElement { get; }
 
-        List<(string PropertyName, ElementType ElementType)> ColumnPropertyInfo = new List<(string PropertyName, ElementType ElementType)>();
+        List<(string PropertyName, ElementType ElementType, double? Width)> ColumnPropertyInfo = new List<(string PropertyName, ElementType ElementType, double? Width)>();
 
         ContextMenu_Column _columnContextMenu;
         ColumnMenuInfo _columnMenuInfo;
 
-        public TableWorksheet(ITableElement element, BaseWorkbook workbook, Excel.Worksheet worksheet, Metadata metadata)
-            : base(element, workbook, worksheet, metadata)
+        public TableWorksheet(ITableElement element, BaseWorkbook workbook, Excel.Worksheet worksheet, string path, Metadata metadata)
+            : base(element, workbook, worksheet, path, metadata)
         {
             TableElement = element;
 
-            SpreadElement();
+            var columnSetting = Metadata.GetColumnSetting(Path);
+
+            SpreadElement(columnSetting);
+            ApplyMetadata();
             AttachEvents();
             CreateContextMenus();
         }
 
-        private void SpreadElement()
+        private void SpreadElement(ColumnSetting columnSetting)
         {
             var sheet = Worksheet;
             var table = TableElement;
             var meta = Metadata;
 
             // title
-            ColumnPropertyInfo = table.Properties.ToList();
+            ColumnPropertyInfo = table.Properties
+                .OrderBy(property => property, new ColumnComparer(columnSetting))
+                .Select(property =>
+                {
+                    var columnSettingData = columnSetting?.GetOrderData(property.PropertyName);
+                    return (property.PropertyName, property.ElementType, columnSettingData?.Width);
+                })
+                .ToList();
 
             ColumnPropertyInfo.ForEach((propertyInfo, index) =>
             {
                 var column = index + 1;
                 var cell = sheet.Cell(1, column);
                 cell.Value2 = propertyInfo.PropertyName;
+                if (propertyInfo.Width.HasValue)
+                {
+                    cell.ColumnWidth = propertyInfo.Width.Value;
+                }
             });
 
             // values
@@ -194,7 +208,7 @@ namespace ExcelEditorAddIn
             if (IsInArea(cell))
             {
                 objectElement = TableElement.Elements.ElementAt(cell.Row - 2);
-                (propertyName, elementType) = ColumnPropertyInfo[cell.Column - 1];
+                (propertyName, elementType, _) = ColumnPropertyInfo[cell.Column - 1];
 
                 return true;
             }
@@ -202,6 +216,16 @@ namespace ExcelEditorAddIn
             propertyName = null;
             elementType = ElementType.Null;
             return false;
+        }
+
+        private void ApplyMetadata()
+        {
+            var columnSetting = Metadata.GetColumnSetting(Path);
+
+            if (columnSetting != null)
+            {
+
+            }
         }
     }
 }

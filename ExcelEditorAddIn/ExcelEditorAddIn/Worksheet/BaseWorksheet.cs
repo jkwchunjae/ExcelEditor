@@ -15,6 +15,7 @@ namespace ExcelEditorAddIn
         public IElement Element { get; }
         public BaseWorkbook Workbook { get; }
         public Excel.Worksheet Worksheet { get; }
+        protected string Path { get; }
         protected CommandBars CommandBars => Globals.ThisAddIn.Application.CommandBars;
         protected Metadata Metadata { get; private set; }
 
@@ -22,12 +23,13 @@ namespace ExcelEditorAddIn
 
         public event EventHandler Changed;
 
-        public BaseWorksheet(IElement element, BaseWorkbook workbook, Excel.Worksheet worksheet, Metadata metadata)
+        public BaseWorksheet(IElement element, BaseWorkbook workbook, Excel.Worksheet worksheet, string path, Metadata metadata)
         {
             Element = element;
             Workbook = workbook;
             Worksheet = worksheet;
             Metadata = metadata;
+            Path = path;
 
             AttachEvents_Base();
         }

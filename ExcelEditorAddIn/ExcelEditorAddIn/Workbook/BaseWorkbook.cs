@@ -69,7 +69,7 @@ namespace ExcelEditorAddIn
         {
             var metadataPath = PathOf.MetadataFilePath(FilePath);
 
-            if (!Directory.Exists(metadataPath))
+            if (!File.Exists(metadataPath))
             {
                 metadata = null;
                 return false;
