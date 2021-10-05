@@ -56,8 +56,8 @@ namespace NUnitTestProject1
             var info = ContextMenuInfo.Make(address) as ColumnMenuInfo;
 
             Assert.AreEqual(ContextMenuType.Column, info.Type);
-            Assert.AreEqual("E", info.BeginColumn);
-            Assert.AreEqual("F", info.EndColumn);
+            Assert.AreEqual(5, info.BeginColumn);
+            Assert.AreEqual(6, info.EndColumn);
         }
 
         [Test]
@@ -68,8 +68,8 @@ namespace NUnitTestProject1
             var info = ContextMenuInfo.Make(address) as ColumnMenuInfo;
 
             Assert.AreEqual(ContextMenuType.Column, info.Type);
-            Assert.AreEqual("E", info.BeginColumn);
-            Assert.AreEqual("EE", info.EndColumn);
+            Assert.AreEqual(5, info.BeginColumn);
+            Assert.AreEqual(135, info.EndColumn);
         }
 
         [Test]
