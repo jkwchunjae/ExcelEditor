@@ -193,7 +193,9 @@
     </Compile>
     <Compile Include="Extensions\CommandBarsExtensions.cs" />
     <Compile Include="Extensions\Utils.cs" />
+    <Compile Include="Metadata\ColumnSetting.cs" />
     <Compile Include="Metadata\Metadata.cs" />
+    <Compile Include="Metadata\MetadataExtension.cs" />
     <Compile Include="Workbook\BaseWorkbook.cs" />
     <Compile Include="Workbook\TableWorkbook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -202,6 +204,7 @@
     <Compile Include="Extensions\WorkbookExtensions.cs" />
     <Compile Include="Extensions\WorksheetExtensions.cs" />
     <Compile Include="Worksheet\BaseWorksheet.cs" />
+    <Compile Include="Metadata\ColumnComparer.cs" />
     <Compile Include="Worksheet\TableWorksheet.cs" />
     <EmbeddedResource Include="ExcelEditorRibbon.resx">
       <DependentUpon>ExcelEditorRibbon.cs</DependentUpon>

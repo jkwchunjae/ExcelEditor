@@ -58,6 +58,11 @@ namespace ExcelEditorAddIn
                 }
             });
 
+            _beginColumnOrderWidth = ColumnPropertyInfo
+                .Select((x, i) => new { Cell = sheet.Cell(1, i + 1), x.PropertyName, x.Width })
+                .Select(x => (x.PropertyName, (double)x.Cell.ColumnWidth))
+                .ToList();
+
             // values
             if (table.Any)
             {
@@ -226,6 +231,30 @@ namespace ExcelEditorAddIn
             {
 
             }
+        }
+
+        public override void UpdateMetadata()
+        {
+            base.UpdateMetadata();
+
+            var sheet = Worksheet;
+
+            var nowColumnOrderWidth = ColumnPropertyInfo
+                .Select((x, i) => new { Cell = sheet.Cell(1, i + 1), x.PropertyName, x.Width })
+                .Select(x => new { x.PropertyName, Width = (double)x.Cell.ColumnWidth })
+                .ToList();
+
+
+
+            var columnSetting = Metadata.GetColumnSetting(Path);
+
+            columnSetting.OrderWidthList = nowColumnOrderWidth
+                .Select(x => new ColumnSetting.OrderWidth
+                {
+                    Name = x.PropertyName,
+                    Width = (double?)x.Width,
+                })
+                .ToList();
         }
     }
 }

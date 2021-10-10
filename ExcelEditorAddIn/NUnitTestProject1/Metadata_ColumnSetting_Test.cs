@@ -23,7 +23,7 @@ namespace NUnitTestProject1
         {
             var columnSetting = new ColumnSetting()
             {
-                Info = new List<ColumnSetting.OrderWidth>()
+                OrderWidthList = new List<ColumnSetting.OrderWidth>()
                 {
                     new ColumnSetting.OrderWidth { Name = "Column1", Width = 100 },
                     new ColumnSetting.OrderWidth { Name = "Column2", Width = 100 },
@@ -49,7 +49,7 @@ namespace NUnitTestProject1
         {
             var columnSetting = new ColumnSetting()
             {
-                Info = new List<ColumnSetting.OrderWidth>()
+                OrderWidthList = new List<ColumnSetting.OrderWidth>()
                 {
                     new ColumnSetting.OrderWidth { Name = "Column2", Width = 100 },
                     new ColumnSetting.OrderWidth { Name = "Column1", Width = 100 },
@@ -75,7 +75,7 @@ namespace NUnitTestProject1
         {
             var columnSetting = new ColumnSetting()
             {
-                Info = new List<ColumnSetting.OrderWidth>()
+                OrderWidthList = new List<ColumnSetting.OrderWidth>()
                 {
                     new ColumnSetting.OrderWidth { Name = "Column1", Width = 100 },
                     new ColumnSetting.OrderWidth { Name = "Column2", Width = 100 },
@@ -100,7 +100,7 @@ namespace NUnitTestProject1
         {
             var columnSetting = new ColumnSetting()
             {
-                Info = new List<ColumnSetting.OrderWidth>()
+                OrderWidthList = new List<ColumnSetting.OrderWidth>()
                 {
                     new ColumnSetting.OrderWidth { Name = "Column1", Width = 100 },
                     new ColumnSetting.OrderWidth { Name = "Column2", Width = 100 },
@@ -124,7 +124,7 @@ namespace NUnitTestProject1
         {
             var columnSetting = new ColumnSetting()
             {
-                Info = new List<ColumnSetting.OrderWidth>()
+                OrderWidthList = new List<ColumnSetting.OrderWidth>()
                 {
                     new ColumnSetting.OrderWidth { Name = "Column2", Width = 100 },
                     new ColumnSetting.OrderWidth { Name = "Column3", Width = 100 },
@@ -149,7 +149,7 @@ namespace NUnitTestProject1
         {
             var columnSetting = new ColumnSetting()
             {
-                Info = new List<ColumnSetting.OrderWidth>()
+                OrderWidthList = new List<ColumnSetting.OrderWidth>()
                 {
                     new ColumnSetting.OrderWidth { Name = "Column2", Width = 100 },
                     new ColumnSetting.OrderWidth { Name = "Column4", Width = 100 },
@@ -174,7 +174,7 @@ namespace NUnitTestProject1
         {
             var columnSetting = new ColumnSetting()
             {
-                Info = null,
+                OrderWidthList = null,
             };
 
             var ordered = _properties
@@ -204,6 +204,56 @@ namespace NUnitTestProject1
             Assert.AreEqual("Column2", ordered[1]);
             Assert.AreEqual("Column3", ordered[2]);
             Assert.AreEqual("Column4", ordered[3]);
+        }
+
+        [Test]
+        public void ColumnSettting_Equals_Test1()
+        {
+            ColumnSetting setting1 = new ColumnSetting
+            {
+                Path = "/",
+                OrderWidthList = new List<ColumnSetting.OrderWidth>
+                {
+                    new ColumnSetting.OrderWidth { Name = "C1", Width = 10.1, Order = 0 },
+                    new ColumnSetting.OrderWidth { Name = "C2", Width = 20, Order = 1 },
+                },
+            };
+            ColumnSetting setting2 = new ColumnSetting
+            {
+                Path = "/",
+                OrderWidthList = new List<ColumnSetting.OrderWidth>
+                {
+                    new ColumnSetting.OrderWidth { Name = "C1", Width = 10.1, Order = 0 },
+                    new ColumnSetting.OrderWidth { Name = "C2", Width = 20, Order = 1 },
+                },
+            };
+
+            Assert.True(setting1 == setting2);
+        }
+
+        [Test]
+        public void ColumnSettting_Equals_Test2()
+        {
+            ColumnSetting setting1 = new ColumnSetting
+            {
+                Path = "/",
+                OrderWidthList = new List<ColumnSetting.OrderWidth>
+                {
+                    new ColumnSetting.OrderWidth { Name = "C1", Width = 10.1, Order = 0 },
+                    new ColumnSetting.OrderWidth { Name = "C2", Width = 20, Order = 1 },
+                },
+            };
+            ColumnSetting setting2 = new ColumnSetting
+            {
+                Path = "/",
+                OrderWidthList = new List<ColumnSetting.OrderWidth>
+                {
+                    new ColumnSetting.OrderWidth { Name = "C1", Width = 10, Order = 0 }, // Width = 10
+                    new ColumnSetting.OrderWidth { Name = "C2", Width = 20, Order = 1 },
+                },
+            };
+
+            Assert.False(setting1 == setting2);
         }
     }
 }

@@ -115,11 +115,14 @@ namespace ExcelEditorAddIn
 
                 if (Metadata != null)
                 {
-                    File.WriteAllText(PathOf.MetadataFilePath(FilePath), Element.Serialize(Metadata));
+                    var metadataPath = PathOf.MetadataFilePath(FilePath);
+                    File.WriteAllText(metadataPath, Element.Serialize(Metadata));
                 }
 
                 Dirty = false;
             }
+
+            MainWorksheet.UpdateMetadata();
         }
 
         private void Workbook_BeforeClose(ref bool Cancel)

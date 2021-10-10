@@ -23,6 +23,8 @@ namespace ExcelEditorAddIn
 
         public event EventHandler Changed;
 
+        protected List<(string PropertyName, double Width)> _beginColumnOrderWidth;
+
         public BaseWorksheet(IElement element, BaseWorkbook workbook, Excel.Worksheet worksheet, string path, Metadata metadata)
         {
             Element = element;
@@ -83,6 +85,10 @@ namespace ExcelEditorAddIn
         protected virtual bool BeforeRowRightClick(RowMenuInfo info)
         {
             return false;
+        }
+
+        public virtual void UpdateMetadata()
+        {
         }
 
         protected bool TryGetElement(Excel.Range cell, out IElement element)
