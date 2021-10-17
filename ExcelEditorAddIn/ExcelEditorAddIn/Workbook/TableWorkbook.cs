@@ -25,7 +25,7 @@ namespace ExcelEditorAddIn
         public override void Open()
         {
             MakeWorkbook();
-            TryOpenMetadata(out var metadata);
+            var metadata = OpenMetadata();
 
             MainWorksheet = new TableWorksheet(
                 element: TableElement,

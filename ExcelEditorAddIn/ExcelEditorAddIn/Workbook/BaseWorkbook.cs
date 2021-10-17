@@ -65,27 +65,26 @@ namespace ExcelEditorAddIn
             Workbook.SaveAs(workbookPath);
         }
 
-        protected bool TryOpenMetadata(out Metadata metadata)
+        protected Metadata OpenMetadata()
         {
-            var metadataPath = PathOf.MetadataFilePath(FilePath);
+            var metadataPath = Element.MetadataFilePath(FilePath);
 
             if (!File.Exists(metadataPath))
             {
-                metadata = null;
-                return false;
+                Metadata = new Metadata();
+                return Metadata;
             }
 
             try
             {
                 var metadataText = File.ReadAllText(metadataPath, Encoding.UTF8);
-                metadata = Element.Deserialize<Metadata>(metadataText);
-                Metadata = metadata;
-                return true;
+                Metadata = Element.Deserialize<Metadata>(metadataText);
+                return Metadata;
             }
             catch
             {
-                metadata = null;
-                return false;
+                Metadata = new Metadata();
+                return Metadata;
             }
         }
 
@@ -113,21 +112,22 @@ namespace ExcelEditorAddIn
                 var text = Element.GetSaveText();
                 File.WriteAllText(FilePath, text);
 
-                if (Metadata != null)
-                {
-                    var metadataPath = PathOf.MetadataFilePath(FilePath);
-                    File.WriteAllText(metadataPath, Element.Serialize(Metadata));
-                }
-
                 Dirty = false;
             }
 
             MainWorksheet.UpdateMetadata();
+            if (Metadata.Dirty)
+            {
+                var metadataPath = Element.MetadataFilePath(FilePath);
+                File.WriteAllText(metadataPath, Element.Serialize(Metadata));
+
+                Metadata.Dirty = false;
+            }
         }
 
         private void Workbook_BeforeClose(ref bool Cancel)
         {
-            if (Dirty)
+            if (Dirty || Metadata.Dirty)
             {
                 var result = MessageBox.Show("저장하지 않은 변경내역이 있습니다.\r\n저장하시겠습니까?", "Excel Editor", MessageBoxButtons.YesNoCancel);
                 if (result == DialogResult.Yes)

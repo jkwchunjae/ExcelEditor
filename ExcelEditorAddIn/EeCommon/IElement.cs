@@ -30,6 +30,7 @@ namespace EeCommon
     {
         T Deserialize<T>(string text);
         string Serialize<T>(T obj);
+        string MetadataFilePath(string filePath);
     }
 
     public interface IElement : IHelper

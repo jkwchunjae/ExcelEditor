@@ -8,6 +8,9 @@ namespace ExcelEditorAddIn
 {
     public class Metadata
     {
+        [JsonIgnore]
+        public bool Dirty { get; set; }
+
         [JsonProperty("columns")]
         public List<ColumnSetting> Columns { get; set; }
     }

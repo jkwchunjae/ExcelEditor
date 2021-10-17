@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Element\JsonArrayElement.cs" />
     <Compile Include="Element\JsonBaseElement.cs" />
+    <Compile Include="Element\JsonHelper.cs" />
     <Compile Include="Element\JsonObjectElement.cs" />
     <Compile Include="Element\JsonTableElement.cs" />
     <Compile Include="Element\JsonValueElement.cs" />

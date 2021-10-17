@@ -18,13 +18,13 @@ namespace ExcelEditorAddIn
         public Excel.Worksheet Worksheet { get; }
         protected string Path { get; }
         protected CommandBars CommandBars => Globals.ThisAddIn.Application.CommandBars;
-        protected Metadata Metadata { get; private set; }
+        protected Metadata Metadata { get; }
 
         protected List<(Excel.Range Cell, IElement Element)> Elements;
 
         public event EventHandler Changed;
 
-        protected List<OrderWidth> _beginColumnOrderWidth;
+        protected ColumnSetting _columnSetting;
 
         public BaseWorksheet(IElement element, BaseWorkbook workbook, Excel.Worksheet worksheet, string path, Metadata metadata)
         {

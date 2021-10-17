@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EeJson
 {
-    public class JsonBaseElement : IElement
+    public class JsonBaseElement : JsonHelper, IElement
     {
         public JToken Token { get; private set; }
         public ElementType Type => GetElementType();
@@ -72,18 +72,6 @@ namespace EeJson
             var jvalue = JsonExtensions.CreateJValue(value, value2, valueType);
             var valueElement = new JsonValueElement(jvalue);
             return valueElement;
-        }
-
-        public T Deserialize<T>(string text)
-        {
-            var obj = JsonConvert.DeserializeObject<T>(text);
-            return obj;
-        }
-
-        public string Serialize<T>(T obj)
-        {
-            var text = JsonConvert.SerializeObject(obj, Formatting.Indented);
-            return text;
         }
     }
 }

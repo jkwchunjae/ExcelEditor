@@ -59,10 +59,14 @@ namespace ExcelEditorAddIn
                 }
             });
 
-            _beginColumnOrderWidth = ColumnPropertyInfo
-                .Select((x, i) => new { Cell = sheet.Cell(1, i + 1), x.PropertyName, x.Width })
-                .Select(x => new OrderWidth { Name = x.PropertyName, Width = (double)x.Cell.ColumnWidth })
-                .ToList();
+            _columnSetting = new ColumnSetting
+            {
+                Path = Path,
+                OrderWidthList = ColumnPropertyInfo
+                    .Select((x, i) => new { Cell = sheet.Cell(1, i + 1), x.PropertyName, x.Width })
+                    .Select(x => new OrderWidth { Name = x.PropertyName, Width = (double)x.Cell.ColumnWidth })
+                    .ToList(),
+            }; 
 
             // values
             if (table.Any)
@@ -240,19 +244,19 @@ namespace ExcelEditorAddIn
 
             var sheet = Worksheet;
 
-            var currentColumnOrderWidth = ColumnPropertyInfo
-                .Select((x, i) => new { Cell = sheet.Cell(1, i + 1), x.PropertyName, x.Width })
-                .Select(x => new OrderWidth { Name = x.PropertyName, Width = (double)x.Cell.ColumnWidth })
-                .ToList();
-
-            if (currentColumnOrderWidth != _beginColumnOrderWidth)
+            var currentColumnSetting = new ColumnSetting
             {
-                Metadata.SetColumnSetting(new ColumnSetting
-                {
-                    Path = Path,
-                    OrderWidthList = currentColumnOrderWidth,
-                });
+                Path = Path,
+                OrderWidthList = ColumnPropertyInfo
+                    .Select((x, i) => new { Cell = sheet.Cell(1, i + 1), x.PropertyName })
+                    .Select(x => new OrderWidth { Name = x.PropertyName, Width = (double)x.Cell.ColumnWidth })
+                    .ToList(),
+            };
 
+            if (currentColumnSetting != _columnSetting)
+            {
+                _columnSetting = currentColumnSetting;
+                Metadata.SetColumnSetting(currentColumnSetting);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -60,7 +61,7 @@ namespace ExcelEditorAddIn
                     if (ow1.Width.HasValue != ow2.Width.HasValue)
                         return false;
                     if (ow1.Width.HasValue && ow2.Width.HasValue)
-                        if (ow1.Width - ow2.Width > double.Epsilon) // ow1.Width != ow2.Width
+                        if (Math.Abs(ow1.Width.Value - ow2.Width.Value) > double.Epsilon) // ow1.Width != ow2.Width
                             return false;
                 }
 
