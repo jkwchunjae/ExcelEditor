@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EeJson
 {
-    public class JsonBaseElement : IElement
+    public class JsonBaseElement : JsonHelper, IElement
     {
         public JToken Token { get; private set; }
         public ElementType Type => GetElementType();

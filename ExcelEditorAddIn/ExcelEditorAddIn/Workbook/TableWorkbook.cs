@@ -13,6 +13,7 @@ namespace ExcelEditorAddIn
     public class TableWorkbook : BaseWorkbook
     {
         public ITableElement TableElement { get; private set; }
+
         public TableWorkbook(ITableElement tableElement, string filePath)
             : base(tableElement, filePath)
         {
@@ -24,8 +25,14 @@ namespace ExcelEditorAddIn
         public override void Open()
         {
             MakeWorkbook();
+            var metadata = OpenMetadata();
 
-            MainWorksheet = new TableWorksheet(TableElement, this, Workbook.SheetList().First());
+            MainWorksheet = new TableWorksheet(
+                element: TableElement,
+                workbook: this,
+                worksheet: Workbook.SheetList().First(),
+                path: "/",
+                metadata: metadata);
             MainWorksheet.Changed += (s, a) => Dirty = true;
 
             Workbook.Activate();

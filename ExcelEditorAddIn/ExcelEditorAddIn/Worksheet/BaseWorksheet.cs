@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ExcelEditorAddIn.ColumnSetting;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ExcelEditorAddIn
@@ -15,17 +16,23 @@ namespace ExcelEditorAddIn
         public IElement Element { get; }
         public BaseWorkbook Workbook { get; }
         public Excel.Worksheet Worksheet { get; }
+        protected string Path { get; }
         protected CommandBars CommandBars => Globals.ThisAddIn.Application.CommandBars;
+        protected Metadata Metadata { get; }
 
         protected List<(Excel.Range Cell, IElement Element)> Elements;
 
         public event EventHandler Changed;
 
-        public BaseWorksheet(IElement element, BaseWorkbook workbook, Excel.Worksheet worksheet)
+        protected ColumnSetting _columnSetting;
+
+        public BaseWorksheet(IElement element, BaseWorkbook workbook, Excel.Worksheet worksheet, string path, Metadata metadata)
         {
             Element = element;
             Workbook = workbook;
             Worksheet = worksheet;
+            Metadata = metadata;
+            Path = path;
 
             AttachEvents_Base();
         }
@@ -79,6 +86,10 @@ namespace ExcelEditorAddIn
         protected virtual bool BeforeRowRightClick(RowMenuInfo info)
         {
             return false;
+        }
+
+        public virtual void UpdateMetadata()
+        {
         }
 
         protected bool TryGetElement(Excel.Range cell, out IElement element)

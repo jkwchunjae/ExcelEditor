@@ -26,7 +26,14 @@ namespace EeCommon
         Float,
     }
 
-    public interface IElement
+    public interface IHelper
+    {
+        T Deserialize<T>(string text);
+        string Serialize<T>(T obj);
+        string MetadataFilePath(string filePath);
+    }
+
+    public interface IElement : IHelper
     {
         ElementType Type { get; }
         object GetExcelValue();
