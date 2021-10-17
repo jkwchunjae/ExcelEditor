@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using static ExcelEditorAddIn.ColumnSetting;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ExcelEditorAddIn
@@ -60,7 +61,7 @@ namespace ExcelEditorAddIn
 
             _beginColumnOrderWidth = ColumnPropertyInfo
                 .Select((x, i) => new { Cell = sheet.Cell(1, i + 1), x.PropertyName, x.Width })
-                .Select(x => (x.PropertyName, (double)x.Cell.ColumnWidth))
+                .Select(x => new OrderWidth { Name = x.PropertyName, Width = (double)x.Cell.ColumnWidth })
                 .ToList();
 
             // values
@@ -239,22 +240,20 @@ namespace ExcelEditorAddIn
 
             var sheet = Worksheet;
 
-            var nowColumnOrderWidth = ColumnPropertyInfo
+            var currentColumnOrderWidth = ColumnPropertyInfo
                 .Select((x, i) => new { Cell = sheet.Cell(1, i + 1), x.PropertyName, x.Width })
-                .Select(x => new { x.PropertyName, Width = (double)x.Cell.ColumnWidth })
+                .Select(x => new OrderWidth { Name = x.PropertyName, Width = (double)x.Cell.ColumnWidth })
                 .ToList();
 
-
-
-            var columnSetting = Metadata.GetColumnSetting(Path);
-
-            columnSetting.OrderWidthList = nowColumnOrderWidth
-                .Select(x => new ColumnSetting.OrderWidth
+            if (currentColumnOrderWidth != _beginColumnOrderWidth)
+            {
+                Metadata.SetColumnSetting(new ColumnSetting
                 {
-                    Name = x.PropertyName,
-                    Width = (double?)x.Width,
-                })
-                .ToList();
+                    Path = Path,
+                    OrderWidthList = currentColumnOrderWidth,
+                });
+
+            }
         }
     }
 }

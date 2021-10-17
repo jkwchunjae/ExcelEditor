@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ExcelEditorAddIn.ColumnSetting;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ExcelEditorAddIn
@@ -23,7 +24,7 @@ namespace ExcelEditorAddIn
 
         public event EventHandler Changed;
 
-        protected List<(string PropertyName, double Width)> _beginColumnOrderWidth;
+        protected List<OrderWidth> _beginColumnOrderWidth;
 
         public BaseWorksheet(IElement element, BaseWorkbook workbook, Excel.Worksheet worksheet, string path, Metadata metadata)
         {

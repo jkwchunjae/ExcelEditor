@@ -1,4 +1,5 @@
 ﻿using JkwExtensions;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ExcelEditorAddIn
@@ -20,6 +21,26 @@ namespace ExcelEditorAddIn
             var columnSetting = metadata.Columns.FirstOrDefault(x => MatchPath(path, x.Path));
 
             return columnSetting;
+        }
+
+        public static void SetColumnSetting(this Metadata metadata, ColumnSetting columnSetting)
+        {
+            if (metadata.Columns == null)
+            {
+                metadata.Columns = new List<ColumnSetting> { columnSetting };
+            }
+            else
+            {
+                var index = metadata.Columns.FindIndex(x => x.Path == columnSetting.Path);
+                if (index == -1)
+                {
+                    metadata.Columns.Add(columnSetting);
+                }
+                else
+                {
+                    metadata.Columns[index] = columnSetting;
+                }
+            }
         }
     }
 }
