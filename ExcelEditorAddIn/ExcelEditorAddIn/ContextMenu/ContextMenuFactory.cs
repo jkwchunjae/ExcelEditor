@@ -9,27 +9,22 @@ namespace ExcelEditorAddIn
 {
     public static class ContextMenuFactory
     {
-        private static List<(string MenuName, IContextMenu ContextMenu)> _contextCache = new List<(string MenuName, IContextMenu)>();
-
         public static ContextMenu_Column CreateColumnMenu(string id)
         {
             var menuName = nameof(ContextMenu_Column) + id;
 
-            if (_contextCache.Any(x => x.MenuName == menuName))
+            var commandBars = Globals.ThisAddIn.Application.CommandBars;
+            var commandBar = commandBars.Find(bar => bar.Name == menuName);
+
+            if (commandBar != null)
             {
-                return (ContextMenu_Column)_contextCache
-                    .First(x => x.MenuName == menuName)
-                    .ContextMenu;
+                return new ContextMenu_Column(commandBar);
             }
 
-            var commandBars = Globals.ThisAddIn.Application.CommandBars;
-            var bar = commandBars.Add(
-                Name: menuName,
-                Position: MsoBarPosition.msoBarPopup,
-                Temporary: true);
-            var menu = new ContextMenu_Column(bar);
-
-            _contextCache.Add((menuName, menu));
+            var newBar = commandBars.Add(Name: menuName,
+                                      Position: MsoBarPosition.msoBarPopup,
+                                      Temporary: true);
+            var menu = new ContextMenu_Column(newBar);
 
             return menu;
         }
