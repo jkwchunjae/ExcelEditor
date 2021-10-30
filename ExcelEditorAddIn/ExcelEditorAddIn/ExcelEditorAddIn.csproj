@@ -182,6 +182,7 @@
   -->
   <ItemGroup>
     <Compile Include="Config\PathOf.cs" />
+    <Compile Include="Config\Recents.cs" />
     <Compile Include="ContextMenu\ContextMenu.cs" />
     <Compile Include="ContextMenu\ContextMenuFactory.cs" />
     <Compile Include="ContextMenu\ContextMenuInfo.cs" />
