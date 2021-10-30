@@ -16,5 +16,8 @@ namespace ExcelEditorAddIn
 
         public static string TemporaryFilePath(string fileName)
             => Path.Combine(LocalRootDirectory, $"{fileName}.xlsx");
+
+        public static string RecentsPath()
+            => Path.Combine(LocalRootDirectory, "recents.json");
     }
 }

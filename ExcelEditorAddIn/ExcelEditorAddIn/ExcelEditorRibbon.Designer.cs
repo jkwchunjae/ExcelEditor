@@ -39,6 +39,7 @@ namespace ExcelEditorAddIn
             this.group1 = this.Factory.CreateRibbonGroup();
             this.JsonOpenButton = this.Factory.CreateRibbonButton();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.RecentsDropdown = this.Factory.CreateRibbonDropDown();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.SuspendLayout();
@@ -53,6 +54,7 @@ namespace ExcelEditorAddIn
             // group1
             // 
             this.group1.Items.Add(this.JsonOpenButton);
+            this.group1.Items.Add(this.RecentsDropdown);
             this.group1.Label = "group1";
             this.group1.Name = "group1";
             // 
@@ -65,6 +67,11 @@ namespace ExcelEditorAddIn
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // RecentsDropdown
+            // 
+            this.RecentsDropdown.Label = "Recents";
+            this.RecentsDropdown.Name = "RecentsDropdown";
             // 
             // ExcelEditorRibbon
             // 
@@ -86,6 +93,7 @@ namespace ExcelEditorAddIn
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton JsonOpenButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        internal Microsoft.Office.Tools.Ribbon.RibbonDropDown RecentsDropdown;
     }
 
     partial class ThisRibbonCollection

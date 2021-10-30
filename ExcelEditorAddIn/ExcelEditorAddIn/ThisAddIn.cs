@@ -36,10 +36,10 @@ namespace ExcelEditorAddIn
             return found != null;
         }
 
-        public void OpenFile(OpenFileDialog openFileDialog)
+        public void OpenFile(string filePath)
         {
             // TODO: json syntax error
-            var filePath = openFileDialog.FileName;
+            Recents.Update(filePath);
 
             if (AlreadyOpened(filePath, out var workbookData))
             {
@@ -55,13 +55,10 @@ namespace ExcelEditorAddIn
                 }
             }
 
-            using (var reader = new StreamReader(openFileDialog.OpenFile()))
-            {
-                var text = reader.ReadToEnd();
+            var text = File.ReadAllText(filePath);
 
-                // if json format
-                OpenJson(text, filePath);
-            }
+            // if json format
+            OpenJson(text, filePath);
         }
 
         private void OpenJson(string jsonText, string filePath)
