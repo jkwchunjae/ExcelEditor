@@ -8,27 +8,29 @@ using System.Threading.Tasks;
 
 namespace ExcelEditorAddIn
 {
-    public class RecentItem
+    public class FavoriteItem
     {
         public string FilePath { get; set; }
-        public DateTime OpenedTime { get; set; }
+        public DateTime AddTime { get; set; }
+        public string Nickname { get; set; }
     }
 
-    public class Recents
+    public class Favorites
     {
-        public static event EventHandler<List<RecentItem>> ItemUpdated;
-        public static List<RecentItem> Items
+        public static event EventHandler<List<FavoriteItem>> ItemUpdated;
+
+        public static List<FavoriteItem> Items
         {
             get
             {
-                if (File.Exists(PathOf.RecentsPath()))
+                if (File.Exists(PathOf.FavoritesPath()))
                 {
                     try
                     {
-                        var jsonText = File.ReadAllText(PathOf.RecentsPath());
-                        var recents = JsonConvert.DeserializeObject<List<RecentItem>>(jsonText);
+                        var jsonText = File.ReadAllText(PathOf.FavoritesPath());
+                        var recents = JsonConvert.DeserializeObject<List<FavoriteItem>>(jsonText);
                         return recents
-                            .OrderByDescending(x => x.OpenedTime)
+                            .OrderByDescending(x => x.AddTime)
                             .Take(20)
                             .ToList();
                     }
@@ -37,13 +39,13 @@ namespace ExcelEditorAddIn
                     }
                 }
 
-                return new List<RecentItem>();
+                return new List<FavoriteItem>();
             }
 
             private set
             {
                 var jsonText = JsonConvert.SerializeObject(value, Formatting.Indented);
-                File.WriteAllText(PathOf.RecentsPath(), jsonText, Encoding.UTF8);
+                File.WriteAllText(PathOf.FavoritesPath(), jsonText, Encoding.UTF8);
             }
         }
 
@@ -53,14 +55,15 @@ namespace ExcelEditorAddIn
             if (items.Any(x => x.FilePath == filePath))
             {
                 var item = items.Find(x => x.FilePath == filePath);
-                item.OpenedTime = DateTime.Now;
+                item.AddTime = DateTime.Now;
             }
             else
             {
-                items.Add(new RecentItem
+                items.Add(new FavoriteItem
                 {
                     FilePath = filePath,
-                    OpenedTime = DateTime.Now,
+                    AddTime = DateTime.Now,
+                    Nickname = Path.GetFileName(filePath),
                 });
             }
 

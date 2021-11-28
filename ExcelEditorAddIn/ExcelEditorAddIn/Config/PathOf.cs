@@ -19,5 +19,8 @@ namespace ExcelEditorAddIn
 
         public static string RecentsPath()
             => Path.Combine(LocalRootDirectory, "recents.json");
+
+        public static string FavoritesPath()
+            => Path.Combine(LocalRootDirectory, "favorites.json");
     }
 }

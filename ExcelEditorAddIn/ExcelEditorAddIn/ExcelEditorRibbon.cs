@@ -1,4 +1,5 @@
 ﻿using EeCommon;
+using JkwExtensions;
 using Microsoft.Office.Tools.Ribbon;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace ExcelEditorAddIn
         private void ExcelEditorRibbon_Load(object sender, RibbonUIEventArgs e)
         {
             InitRecents();
+            //InitFavorites();
         }
 
         private void JsonOpenButton_Click(object sender, RibbonControlEventArgs e)
@@ -36,10 +38,10 @@ namespace ExcelEditorAddIn
 
             LoadRecents();
 
-            Recents.ItemUpdated += (_, __) => LoadRecents();
+            Recents.ItemUpdated += (_, recents) => LoadRecents(recents);
         }
 
-        private void LoadRecents()
+        private void LoadRecents(List<RecentItem> items = null)
         {
             RecentsDropdown.Items.Clear();
 
@@ -47,7 +49,7 @@ namespace ExcelEditorAddIn
             emptyItem.Label = RecentLabel;
             RecentsDropdown.Items.Add(emptyItem);
 
-            foreach (var recentData in Recents.Items)
+            foreach (var recentData in items ?? Recents.Items)
             {
                 var item = Factory.CreateRibbonDropDownItem();
                 item.Label = recentData.FilePath;
@@ -61,6 +63,40 @@ namespace ExcelEditorAddIn
             if (filePath != RecentLabel)
             {
                 Globals.ThisAddIn.OpenFile(filePath);
+            }
+        }
+        #endregion
+
+        #region Favorites
+        private void InitFavorites()
+        {
+            LoadFavorites();
+
+            Favorites.ItemUpdated += (_, favorites) => LoadFavorites(favorites);
+
+            Recents.ItemUpdated += (_, recents) =>
+            {
+                var favorites = Favorites.Items;
+                var remainItems = recents
+                    .Where(rItem => favorites.Empty(f => f.FilePath == rItem.FilePath))
+                    .ToList();
+            };
+        }
+
+        private void LoadFavorites(List<FavoriteItem> items = null)
+        {
+            if (FavoriteGroup.Items.Any())
+            {
+                FavoriteGroup.Items.Clear();
+            }
+
+            foreach (var favorite in items ?? Favorites.Items)
+            {
+                var button = Factory.CreateRibbonButton();
+                button.Label = favorite.Nickname;
+                button.ScreenTip = favorite.FilePath;
+                button.Click += (_, __) => Globals.ThisAddIn.OpenFile(favorite.FilePath);
+                FavoriteGroup.Items.Add(button);
             }
         }
         #endregion
