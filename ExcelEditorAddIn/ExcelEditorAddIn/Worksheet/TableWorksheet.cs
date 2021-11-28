@@ -24,21 +24,24 @@ namespace ExcelEditorAddIn
         {
             TableElement = element;
 
-            var columnSetting = Metadata.GetColumnSetting(Path);
-
-            SpreadElement(columnSetting);
             ApplyMetadata();
+            SpreadElement();
             AttachEvents();
             CreateContextMenus();
+
+            Worksheet.Protect(
+                AllowFiltering: true);
         }
 
-        private void SpreadElement(ColumnSetting columnSetting)
+        private void SpreadElement()
         {
             var sheet = Worksheet;
             var table = TableElement;
             var meta = Metadata;
+            var columnSetting = meta.GetColumnSetting(Path);
 
             // title
+            #region Title
             ColumnPropertyInfo = table.Properties
                 .OrderBy(property => property, new ColumnComparer(columnSetting))
                 .Select(property =>
@@ -53,6 +56,16 @@ namespace ExcelEditorAddIn
                 var column = index + 1;
                 var cell = sheet.Cell(1, column);
                 cell.Value2 = propertyInfo.PropertyName;
+            });
+
+            // Auto filter, Auto fit
+            sheet.Cell(1, 1).AutoFilter(1, VisibleDropDown: true);
+            sheet.Columns.AutoFit();
+
+            ColumnPropertyInfo.ForEach((propertyInfo, index) =>
+            {
+                var column = index + 1;
+                var cell = sheet.Cell(1, column);
                 if (propertyInfo.Width.HasValue)
                 {
                     cell.ColumnWidth = propertyInfo.Width.Value;
@@ -66,7 +79,8 @@ namespace ExcelEditorAddIn
                     .Select((x, i) => new { Cell = sheet.Cell(1, i + 1), x.PropertyName, x.Width })
                     .Select(x => new OrderWidth { Name = x.PropertyName, Width = (double)x.Cell.ColumnWidth })
                     .ToList(),
-            }; 
+            };
+            #endregion
 
             // values
             if (table.Any)
@@ -76,6 +90,11 @@ namespace ExcelEditorAddIn
                 Excel.Range valuesRange = sheet.Range[minCell, maxCell];
                 var values = table.GetExcelArray(ColumnPropertyInfo.Select(x => x.PropertyName));
                 valuesRange.Value2 = values;
+                valuesRange.Locked = false;
+
+                // FreezePans 틀고정
+                sheet.Cell(2, 1).Select();
+                Globals.ThisAddIn.Application.ActiveWindow.FreezePanes = true;
             }
 
             Elements = table.Elements
